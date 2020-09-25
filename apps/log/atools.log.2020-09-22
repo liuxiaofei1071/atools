@@ -1,0 +1,29 @@
+[2020-09-21 14:34:51,742] files_manager.py -> create_upload_file line:20 [INFO] 当前上传的文件是:Rinud Semalam - 岑雨桥.mp3,文件类型是:audio/mpeg
+[2020-09-21 14:59:04,864] files_manager.py line:21 [INFO] 当前上传的文件是:Rinud Semalam - 岑雨桥.mp3,文件类型是:audio/mpeg
+[2020-09-21 14:59:16,308] files_manager.py line:21 [INFO] 当前上传的文件是:q,文件类型是:application/octet-stream
+[2020-09-21 15:06:45,189] files_manager.py line:21 [INFO] 当前上传的文件是:background项目变更.zip,文件类型是:application/x-zip-compressed
+[2020-09-21 15:17:46,512] files_manager.py line:21 [INFO] 当前上传的文件是:q.dll,文件类型是:application/x-msdownload
+[2020-09-22 10:36:37,566] files_manager.py line:21 [INFO] 当前上传的文件是:League of Legends.tlg,文件类型是:application/octet-stream
+[2020-09-22 10:38:38,676] files_manager.py line:21 [INFO] 当前上传的文件是:003.jpg,文件类型是:image/jpeg
+[2020-09-22 11:08:34,060] files_manager.py line:21 [INFO] 当前上传的文件是:可可-爷爷-老爷爷.mp4,文件类型是:video/mp4
+[2020-09-22 11:09:58,493] files_manager.py line:21 [INFO] 当前上传的文件是:分手假期-钟洁,Hojo.mp3,文件类型是:audio/mpeg
+[2020-09-22 11:21:48,454] files_manager.py line:21 [INFO] 当前上传的文件是:aa.log.log,文件类型是:application/octet-stream
+[2020-09-22 13:45:57,549] files_manager.py line:21 [INFO] 当前上传的文件是:003.rar,文件类型是:application/octet-stream
+[2020-09-22 13:47:34,592] files_manager.py line:21 [INFO] 当前上传的文件是:111.docx,文件类型是:application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2020-09-22 13:48:56,109] files_manager.py line:21 [INFO] 当前上传的文件是:111.doc,文件类型是:application/msword
+[2020-09-22 16:30:41,986] files_manager.py line:27 [INFO] 当前上传的文件是:003.log,文件类型是:application/octet-stream
+[2020-09-22 16:34:51,820] files_manager.py line:27 [INFO] 当前上传的文件是:105-indoor.jpg,文件类型是:image/jpeg
+[2020-09-22 16:35:35,453] files_manager.py line:27 [INFO] 当前上传的文件是:access_contro_critical.png,文件类型是:image/png
+[2020-09-22 16:36:50,431] files_manager.py line:27 [INFO] 当前上传的文件是:驱动指标数据20200910162443.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+[2020-09-22 16:39:05,739] files_manager.py line:27 [INFO] 当前上传的文件是:驱动指标数据20200910162443.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+[2020-09-22 16:40:49,888] files_manager.py line:27 [INFO] 当前上传的文件是:驱动指标数据20200910162443.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+[2020-09-22 16:41:38,132] files_manager.py line:27 [INFO] 当前上传的文件是:告警规则20200920134856.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+[2020-09-22 16:41:45,149] files_manager.py line:27 [INFO] 当前上传的文件是:biamp_forte_guangzhou.py,文件类型是:text/plain
+[2020-09-22 16:42:32,033] files_manager.py line:27 [INFO] 当前上传的文件是:石油考试注意事项.zip,文件类型是:application/x-zip-compressed
+[2020-09-22 16:43:06,438] files_manager.py line:27 [INFO] 当前上传的文件是:哇-李贞贤.mp3,文件类型是:audio/mpeg
+[2020-09-22 16:43:18,912] files_manager.py line:27 [INFO] 当前上传的文件是:可可-爷爷-老爷爷.mp4,文件类型是:video/mp4
+[2020-09-22 16:43:50,713] files_manager.py line:27 [INFO] 当前上传的文件是:可可-爷爷-老爷爷.mp4,文件类型是:video/mp4
+[2020-09-22 17:00:24,682] files_manager.py line:32 [INFO] 当前上传的文件是:个人事项.txt,文件类型是:text/plain
+[2020-09-22 17:02:05,197] files_manager.py line:32 [INFO] 当前上传的文件是:告警规则20200920142819.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+[2020-09-22 17:02:05,198] files_manager.py line:52 [ERROR] D:\Python\python3.7\Framework\FastAPI\atools\apps\resource\excel资源目录不存在
+[2020-09-22 17:04:58,476] files_manager.py line:32 [INFO] 当前上传的文件是:驱动指标数据20200910162716.xlsx,文件类型是:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet

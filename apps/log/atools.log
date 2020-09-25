@@ -1,0 +1,10 @@
+[2020-09-24 16:34:20,443] files_manager.py line:32 [INFO] 当前上传的文件是:008.jpg,文件类型是:image/jpeg
+[2020-09-24 16:38:41,638] files_manager.py line:32 [INFO] 当前上传的文件是:002.jpg,文件类型是:image/jpeg
+[2020-09-24 16:40:09,676] files_manager.py line:32 [INFO] 当前上传的文件是:002.jpg,文件类型是:image/jpeg
+[2020-09-24 16:41:39,867] files_manager.py line:32 [INFO] 当前上传的文件是:002.jpg,文件类型是:image/jpeg
+[2020-09-24 16:46:00,042] files_manager.py line:33 [INFO] 当前上传的文件是:001.jpg,文件类型是:image/jpeg
+[2020-09-24 16:47:42,315] files_manager.py line:33 [INFO] 当前上传的文件是:002.jpg,文件类型是:image/jpeg
+[2020-09-25 16:08:50,623] files_manager.py line:35 [INFO] 当前上传的文件是:014.jpg,文件类型是:image/jpeg
+[2020-09-25 18:58:39,054] files_manager.py line:35 [INFO] 当前上传的文件是:t_iot_drives.txt,文件类型是:text/plain
+[2020-09-25 18:59:23,570] files_manager.py line:35 [INFO] 当前上传的文件是:singer.sql,文件类型是:application/octet-stream
+[2020-09-25 18:59:23,570] files_manager.py line:41 [ERROR] 上传的文件类型没有被支持!请检查文件类型或文件名

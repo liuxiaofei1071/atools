@@ -7,20 +7,15 @@
 import os
 from fastapi import File, UploadFile
 
-from apps.conf.settings import RESOURCE_PATH, TypePath
+from apps.conf.settings import TypePath,RESOURCE_PATH
 from apps.utils.content_type import ContentType
 from apps.controller import router
 from apps.conf import logger
 from apps.utils.used.tools import Tools
 
 
-@router.get("/files/", tags=["files"])
-async def create_file(file: bytes = File(...)):
-    return {"file_size": len(file)}
-
-
 @router.post("/upload/",status_code=201)
-async def create_upload_file(file: UploadFile = File(...)):
+async def create_upload_file(file: UploadFile = File(...),):
     response = {
         "data": {
             "is_upload": "true",
@@ -44,20 +39,21 @@ async def create_upload_file(file: UploadFile = File(...)):
     if _directory_name in TypePath:
         _directory_name_path = os.path.join(RESOURCE_PATH, _directory_name)
         if os.path.exists(_directory_name_path):
-            u_filename = f"{Tools.uuid_name(filename)}.{filename.split('.')[1]}"
-            filename_full_path = os.path.join(_directory_name_path, u_filename)
-
-            file_data = await file.read()
-            with open(filename_full_path, 'wb') as f:
-                f.write(file_data)
-            f.close()
-            response["data"]["u_filename"] = u_filename
-            response["data"]["path"] = filename_full_path
-            response["data"]["size"] = f"{int(size/8/1000)}k"
+            pass
         else:
-            response["data"]["is_upload"] = "false"
-            response["error"] = f"{_directory_name_path}资源目录不存在"
-            logger.error(f"{_directory_name_path}资源目录不存在")
+            os.chdir(RESOURCE_PATH)
+            os.mkdir(_directory_name)
+        u_filename = Tools.uuid_name(filename)
+        filename_full_path = os.path.join(_directory_name_path, u_filename)
+
+        file_data = await file.read()
+        with open(filename_full_path, 'wb') as f:
+            f.write(file_data)
+        f.close()
+        response["data"]["u_filename"] = u_filename
+        response["data"]["path"] = filename_full_path
+        response["data"]["size"] = f"{int(size / 8 / 1000)}k"
+
     else:
         response["error"] = "文件类型不支持"
         response["data"]["is_upload"] = "false"

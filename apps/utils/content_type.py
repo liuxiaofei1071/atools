@@ -10,15 +10,10 @@ CONTENT_TYPE = [
     {
         "type": "text/plain",
         "mappings": [
+            {"suffix": ".py", "name": "py"},
             {"suffix": ".txt", "name": "txt"}
         ]
-    },{
-        "type": "text/x-python",
-        "mappings": [
-            {"suffix": ".py", "name": "py"},
-        ]
-    },
-    {
+    }, {
         "type": "image/png",
         "mappings": [
             {"suffix": ".png", "name": "images"}

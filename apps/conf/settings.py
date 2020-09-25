@@ -8,12 +8,7 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-#项目资源目录
 RESOURCE_PATH = os.path.join(BASE_DIR, "resource")
 
-#部署资源目录
-#PROD_RESOURCE_PATH = "/opt/resource"
-
-TypePath = ["py", "icon", "images", "music", "video", "excel","txt"]
-
+# 文件服务器配置
+TypePath = ["py", "icon", "images", "music", "video", "excel"]

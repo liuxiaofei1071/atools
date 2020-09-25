@@ -16,12 +16,11 @@ LOG_LEVEL_ERROR = logging.ERROR
 LOG_LEVEL_CRITICAL = logging.CRITICAL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-filename_path = os.path.join(BASE_DIR, "log/atools.log")
-
+filename_path = os.path.join(BASE_DIR,"log/atools.log")
 
 class Logger(object):
 
-    def __init__(self, filename, fmt, level, when='D', back_count=3):
+    def __init__(self, filename,fmt,level, when='D', back_count=3):
         self.filename = filename
         self.fmt = fmt
         self.level = level
@@ -35,7 +34,7 @@ class Logger(object):
         sh = logging.StreamHandler()  # 往屏幕上输出
         sh.setFormatter(format_str)  # 设置屏幕上显示的格式
         th = handlers.TimedRotatingFileHandler(
-            filename=self.filename, when=self.when, backupCount=self.backCount, encoding='utf-8')  # 往文件里写入#指定间隔时间自动生成文件的处理器
+            filename=self.filename, when=self.when, backupCount=self.backCount,encoding='utf-8')  # 往文件里写入#指定间隔时间自动生成文件的处理器
         th.setFormatter(format_str)  # 设置文件里写入的格式
         logger.addHandler(sh)  # 把对象加到logger里
         logger.addHandler(th)

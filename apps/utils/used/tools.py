@@ -17,6 +17,7 @@ class Tools:
     def uuid_name(filename):
         _uid = uuid.uuid5(uuid.NAMESPACE_DNS, filename)
         uid_name = f"{str(_uid).replace('-','')}"+"."+ filename.split('.')[1]
+<<<<<<< HEAD
         return uid_name
 
     @staticmethod

@@ -30,7 +30,7 @@ async def get_infos():
             temp.append(i)
         else:
             temp.append(i)
-    driver_infos.append(dict(zip([key[0] for key in cursor.description], temp)))
+    driver_infos.append(dict(zip([key[0] for key in cursor.description], results)))
 
     return {'driver_all': driver_infos}
 

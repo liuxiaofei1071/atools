@@ -6,6 +6,7 @@
 # @File : files_manager.py
 import os
 from fastapi import File, UploadFile
+from starlette.responses import FileResponse
 
 from apps.conf.settings import RESOURCE_PATH, TypePath
 from apps.utils.content_type import ContentType
@@ -65,3 +66,14 @@ async def create_upload_file(file: UploadFile = File(...)):
     response["data"]["filename"] = filename
     response["data"]["content_type"] = content_type
     return response
+
+@router.get("/download",status_code=200)
+async def download_file():
+    file_path = r"D:\Python\python3.7\Framework\FastAPI\atools\apps\resource\txt\30549edc47a75e1ca11871d20f8a66af.txt"
+    with open(file_path, 'rb') as target_file:
+        while True:
+            chunk = target_file.read(512)
+            if chunk:
+                yield chunk
+            else:
+                break

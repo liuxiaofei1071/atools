@@ -21,10 +21,21 @@ from apps.conf.secure import (
 
 class DB:
     # 初始化/构造
-    def __init__(self, host='127.0.0.1', port=3306, user='root', password='123', database='vod'):
+    def __init__(self, host, port, user, password, database):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+        self.database = database
         try:
             # 获取数据库连接/句柄
-            self.coon = pymysql.connect(host=host, port=port, user=user, password=password, database=database)
+            self.coon = pymysql.connect(
+                host=self.host,
+                port=self.port,
+                user=self.user,
+                password=self.password,
+                database=self.database
+            )
             # 获取游标
             self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
         except Exception as e:

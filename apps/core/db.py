@@ -16,11 +16,10 @@ from apps.conf.secure import (
     DATABASE
 )
 
-"""创建一个基于pymysql的操作类 主要用于对数据的增删改查"""
-
 
 class DB:
-    # 初始化/构造
+    """创建一个基于pymysql的操作类 主要用于对数据的增删改查"""
+
     def __init__(self, host, port, user, password, database):
         self.host = host
         self.port = port
@@ -41,51 +40,57 @@ class DB:
         except Exception as e:
             logger.error(e)
 
-    # 增
     def insert(self, sql):
+        """新增"""
         try:
-            insert_id = self.cursor.execute(sql)
+            self.cursor.execute(sql)
             self.coon.commit()
             return self.cursor.lastrowid
-        except:
+        except Exception as e:
+            logger.error(e)
             self.coon.rollback()
-            return 0
+            return -1
 
-    # 删
     def delete(self, sql):
+        """删除"""
         try:
-            del_id = self.cursor.execute(sql)
+            self.cursor.execute(sql)
             self.coon.commit()
             return self.coon.affected_rows()
-        except:
+        except Exception as e:
+            logger.error(e)
             self.coon.rollback()
-            return 0
+            return -1
 
-    # 改
     def update(self, sql):
+        """更新"""
         try:
-            update_id = self.cursor.execute(sql)
+            self.cursor.execute(sql)
             self.coon.commit()
             return self.coon.affected_rows()
-        except:
+        except Exception as e:
             self.coon.rollback()
-            return 0
+            logger.error(e)
+            return -1
 
-    # 查
     def select(self, sql):
+        """查所有记录"""
         try:
             self.cursor.execute(sql)
             data = self.cursor.fetchall()
             return data
-        except:
+        except Exception as e:
+            logger.error(e)
             return []
 
-    # 查一条记录
     def get_one(self, sql):
+        """查一条记录"""
         try:
             self.cursor.execute(sql)
-            return self.cursor.fetchone()
-        except:
+            result = self.cursor.fetchone()
+            return result if result else {}
+        except Exception as e:
+            logger.error(e)
             return {}
 
     # 析构函数
@@ -95,7 +100,8 @@ class DB:
                 self.cursor.close()
             if self.coon:
                 self.coon.close()
-        except:
+        except Exception as e:
+            logger.error(e)
             pass
 
 

@@ -9,7 +9,7 @@ from typing import Optional
 
 
 class SongItem(BaseModel):
-    song_name: str
-    resource_id: str
+    music_name: str
+    music_path: str
     size: int
-    singer: Optional[str] = None
+    lyrics_path: Optional[str] = None

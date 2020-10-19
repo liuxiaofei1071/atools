@@ -16,7 +16,6 @@ from apps.conf.secure import (
 )
 
 
-
 def create_app():
     app = FastAPI()
 
@@ -26,7 +25,6 @@ def create_app():
         "http://localhost",
         "http://localhost:8080",
     ]
-
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,

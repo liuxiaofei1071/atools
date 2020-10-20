@@ -31,7 +31,7 @@ async def create_song(item: SongItem):
     # song_name, song_type = song_full_name.split(".")
     is_repeat = mf_song.check_a_song(song_name)
     if is_repeat:
-        rest = mf_song.insert_song(song_id, song_name, song_type, song_path, size, lyrics_path)
+        mf_song.insert_song(song_id, song_name, song_type, song_path, size, lyrics_path)
     else:
         RESPONSE["data"]["success"] = "false"
         RESPONSE["error"] = "该歌曲已存在"

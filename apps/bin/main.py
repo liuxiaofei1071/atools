@@ -3,13 +3,18 @@
 # @Author : Cassie Daddy
 # @Email : liuxiaofeikeke@163.com
 # @Site : 
-# @File : start.py
+# @File : main.py
 
+import uvicorn
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from apps.controller import router
+from apps.conf.secure import (
+    HOST, PORT, DEBUG
+)
+
 
 def create_app():
     app = FastAPI()
@@ -28,7 +33,10 @@ def create_app():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app.include_router(router,prefix="/api/v1")
+    app.include_router(router, prefix="/api/v1")
     return app
 
+app = create_app()
 
+if __name__ == '__main__':
+    uvicorn.run(app="main:app", host=HOST, port=PORT, reload=True, debug=DEBUG)

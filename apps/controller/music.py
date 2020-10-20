@@ -19,19 +19,17 @@ from apps.conf import logger
 
 @router.post("/song", tags=["song"])
 async def create_song(item: SongItem):
-    song_full_name = item.music_name
-    song_path = item.music_path
+    song_name = item.song_name
+    singer = item.singer
     size = item.size
-    lyrics_path = item.lyrics_path
+    resource_id = item.resource_id
     song_id = Tools.uid()
-
-    start = song_full_name.rindex(".")
-    song_name = song_full_name[:start]
-    song_type = song_full_name[start + 1:]
+    if singer:
+        singer_id = Tools.uid()
     # song_name, song_type = song_full_name.split(".")
     is_repeat = mf_song.check_a_song(song_name)
     if is_repeat:
-        rest = mf_song.insert_song(song_id, song_name, song_type, song_path, size, lyrics_path)
+        mf_song.create_a_song(song_id, song_name, singer_id, resource_id, size)
     else:
         RESPONSE["data"]["success"] = "false"
         RESPONSE["error"] = "该歌曲已存在"
@@ -40,11 +38,11 @@ async def create_song(item: SongItem):
 
 
 @router.get("/song", tags=["song"])
-async def get_a_song(song_id: Optional[str] = Query(None, min_length=3, max_length=50) ):
+async def get_a_song(song_id: Optional[str] = Query(None, min_length=3, max_length=50)):
     if song_id:
         result = mf_song.get_one_song(song_id)
         if result:
-            result["size"] = f"{round(int(result['size'])/1024/1024,2)}MB"
+            result["size"] = f"{round(int(result['size']) / 1024 / 1024, 2)}MB"
             RESPONSE["data"].update(result)
         else:
             RESPONSE["data"]["success"] = "false"
@@ -54,13 +52,14 @@ async def get_a_song(song_id: Optional[str] = Query(None, min_length=3, max_leng
         RESPONSE["error"] = "参数异常"
     return RESPONSE
 
-@router.get("/song/list",tags=["song"])
+
+@router.get("/song/list", tags=["song"])
 async def song_list():
     result = mf_song.get_song_list()
     print(result)
     if result:
         for item in result:
-            item["size"] = f"{round(int(item['size'])/8/1024/1024,2)}MB"
+            item["size"] = f"{round(int(item['size']) / 8 / 1024 / 1024, 2)}MB"
         RESPONSE_LIST["data"] = result
     else:
         RESPONSE_LIST["error"] = "歌曲查询数据为空"

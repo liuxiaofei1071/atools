@@ -8,10 +8,10 @@
 from apps.core.db import db
 
 
-def insert_song(*args):
+def create_a_song(*args):
     """添加歌曲"""
-    sql = f"INSERT INTO cc_song(`id`,`song_name`,`song_type`,`song_path`,`size`,`lyrics_path`,`create_time`) \
-          VALUES ('{args[0]}','{args[1]}','{args[2]}','{args[3]}','{args[4]}','{args[5]}',now())"
+    sql = f"INSERT INTO cc_song(`id`,`song_name`,`singer_id`,`resource_id`,`size`,`create_time`) \
+          VALUES ('{args[0]}','{args[1]}','{args[2]}','{args[3]}','{args[4]}',now())"
     return db.insert(sql)
 
 

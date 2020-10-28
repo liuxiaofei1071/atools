@@ -18,9 +18,7 @@ from apps.db.db import db
 @router.get('/getInfos/', response_class=JSONResponse, tags=['select'])
 async def get_infos():
     sql = 'select * from t_drivers;'
-    cursor = db.cursor
-    cursor.execute(sql)
-    results = cursor.fetchall()
+    results = db.select(sql)
 
     return {'driver_all': results}
 

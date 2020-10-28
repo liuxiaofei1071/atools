@@ -21,18 +21,8 @@ async def get_infos():
     cursor = db.cursor
     cursor.execute(sql)
     results = cursor.fetchall()
-    driver_infos = []
 
-    temp = []
-    for i in results:
-        if isinstance(i, datetime.datetime):
-            i = i.strftime("%Y-%m-%d %H:%M:%S")
-            temp.append(i)
-        else:
-            temp.append(i)
-    driver_infos.append(dict(zip([key[0] for key in cursor.description], results)))
-
-    return {'driver_all': driver_infos}
+    return {'driver_all': results}
 
 
 @router.post('/creatDriver/', tags=['creat'])

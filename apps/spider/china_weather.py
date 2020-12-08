@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Time : 2020/9/28 14:50
-# @Author : Cassie Daddy
+# @Author : Cadman
 # @Email : liuxiaofeikeke@163.com
 # @Site : 
 # @File : china_weather.py
@@ -35,7 +35,6 @@ class Weather:
             print(self.get_a_week_weather())
             print(self.get_weather_for_life())
 
-
     def request_info(self, url, post=False, params=None, data=None):
         if post:
             response = requests.post(url, data=json.dumps(data), headers=self.headers)
@@ -44,7 +43,7 @@ class Weather:
         return response
 
     def get_city_weather(self):
-        result = self.origin_info.get("cityDZ","")
+        result = self.origin_info.get("cityDZ", "")
         if result:
             return self.par_no_utf8_str(result)
 
@@ -63,8 +62,7 @@ class Weather:
         if result:
             return self.par_no_utf8_str(result)
 
-
-    def par_no_utf8_str(self,string):
+    def par_no_utf8_str(self, string):
         return json.loads(string.encode('iso-8859-1').decode('utf-8'))
 
     def __weather_info(self):
@@ -72,10 +70,10 @@ class Weather:
         res = self.request_info(self.WEATHER_URL, params=params)
         if res.status_code == 200:
             # print(f"页面返回原始数据体: {res.text}")
-            origin_info = res.text.replace("&lt;","").split(";")
+            origin_info = res.text.replace("&lt;", "").split(";")
 
             for item in origin_info:
-                key,info = item.split("=")
+                key, info = item.split("=")
                 self.origin_info[key.split(" ")[1]] = info
             #     if "alarmDZ" in _:
             #         print(1)
@@ -86,7 +84,6 @@ class Weather:
             # print(self.origin_info)
             return True
         return False
-
 
     def str_date(self, str_time):
         year = str_time[0:4]
@@ -125,12 +122,13 @@ class Weather:
         # diff_temp = "温差较小,不用担心" if _diff_temp != 0 else "温差较大,注意加减衣服"
         msg = """各位小主,小p天气预报员为大家插播{}今日天气: {}度-{}度,风力{},\
         此刻{},全天{},数据更新时间:{},以上信息来自中国天气网,祝大家生活愉快!""".format(city_name, temp,
-                                               tempn, weather,
-                                               win_direction,
-                                               win_level,
-                                               weather_update_time)
+                                                           tempn, weather,
+                                                           win_direction,
+                                                           win_level,
+                                                           weather_update_time)
         response["text"]["content"] = msg
         return msg
+
 
 def send_msg(content):
     """发送指定信息"""
@@ -138,10 +136,11 @@ def send_msg(content):
     r = requests.post(wx_url, data, auth=('Content-Type', 'application/json'))
     print(r.json)
 
+
 if __name__ == '__main__':
     wx_url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=354d0e52-8e20-44c8-8cb8-154a2ace1ecb"  # 测试机器人1号
     weather = Weather()
     result = weather.start()
-    print(result,11)
+    print(result, 11)
     # if result:
     #     send_msg(result)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Time : 2020/10/7 9:24
-# @Author : Cassie Daddy
+# @Author : Cadman
 # @Email : liuxiaofeikeke@163.com
 # @Site : 
 # @File : china_city_weather_id.py
@@ -15,9 +15,9 @@ headers = {
 }
 html = requests.get(url, headers=headers).content.decode('utf-8')
 print(html)
-tree=etree.HTML(html)
+tree = etree.HTML(html)
 
-hrefs=tree.xpath('//*[@id="artContent"]/font/div[2]/font/div[2]/text()')
+hrefs = tree.xpath('//*[@id="artContent"]/font/div[2]/font/div[2]/text()')
 # for i in hrefs:
 #     print(i[0].text)
 print(hrefs)

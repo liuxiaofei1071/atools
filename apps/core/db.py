@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # @Time : 2020/9/25 12:02
-# @Author : Cassie Daddy
+# @Author : Cadman
 # @Email : liuxiaofeikeke@163.com
 # @Site :
 # @File : files_manager.py
 
 import pymysql
 
-from apps.conf import logger
-from apps.conf.secure import (
+from apps.config.settings import logger
+from apps.config.secure import (
     DB_USER,
     DB_HOST,
     DB_PORT,
@@ -17,7 +17,7 @@ from apps.conf.secure import (
 )
 
 
-class DB:
+class MySQLDB:
     """创建一个基于pymysql的操作类 主要用于对数据的增删改查"""
 
     def __init__(self, host, port, user, password, database):
@@ -40,53 +40,84 @@ class DB:
         except Exception as e:
             logger.error(e)
 
-    def insert(self, sql):
-        """新增"""
+    def insert_more(self, sql, args):
         try:
-            self.cursor.execute(sql)
+            self.cursor = self.coon.cursor()
+            self.cursor.executemany(sql, args)
             self.coon.commit()
             return self.cursor.lastrowid
         except Exception as e:
             logger.error(e)
             self.coon.rollback()
-            return -1
+            return 0
 
-    def delete(self, sql):
+    def insert(self, sql, *args):
+        """新增"""
+        try:
+            self.cursor = self.coon.cursor()
+            self.cursor.execute(sql, args)
+            self.coon.commit()
+            return self.cursor.lastrowid
+        except Exception as e:
+            logger.error(e)
+            self.coon.rollback()
+            return 0
+
+    def delete(self, sql, params):
         """删除"""
         try:
-            self.cursor.execute(sql)
+            self.cursor = self.coon.cursor()
+            self.cursor.execute(sql, params)
             self.coon.commit()
             return self.coon.affected_rows()
         except Exception as e:
             logger.error(e)
             self.coon.rollback()
-            return -1
+            return 0
 
-    def update(self, sql):
+    def update(self, sql, *args):
         """更新"""
         try:
-            self.cursor.execute(sql)
+            self.cursor = self.coon.cursor()
+            self.cursor.execute(sql, args)
             self.coon.commit()
             return self.coon.affected_rows()
         except Exception as e:
             self.coon.rollback()
             logger.error(e)
-            return -1
+            return 0
 
-    def select(self, sql):
+    def select_more(self, sql, *args):
         """查所有记录"""
         try:
-            self.cursor.execute(sql)
+            self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
+            self.cursor.executemany(sql, args)
             data = self.cursor.fetchall()
             return data
         except Exception as e:
             logger.error(e)
             return []
 
-    def get_one(self, sql):
+    def select(self, sql, params=None):
+        """查所有记录"""
+        try:
+            self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
+            if params:
+                self.cursor.execute(sql, params)
+            else:
+                self.cursor.execute(sql)
+            data = self.cursor.fetchall()
+
+            return data
+        except Exception as e:
+            logger.error(e)
+            return []
+
+    def get_one(self, sql, *args):
         """查一条记录"""
         try:
-            self.cursor.execute(sql)
+            self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
+            self.cursor.execute(sql, args)
             result = self.cursor.fetchone()
             return result if result else {}
         except Exception as e:
@@ -102,10 +133,9 @@ class DB:
                 self.coon.close()
         except Exception as e:
             logger.error(e)
-            pass
 
 
-db = DB(
+db = MySQLDB(
     host=DB_HOST,
     port=DB_PORT,
     user=DB_USER,

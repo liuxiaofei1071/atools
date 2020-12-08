@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # @Time : 2020/9/24 16:59
-# @Author : Cassie Daddy
+# @Author : Cadman
 # @Email : liuxiaofeikeke@163.com
 # @Site : 
 # @File : tools.py
@@ -38,3 +38,6 @@ class Tools:
     def base64_decode(string):
         result = base64.b64decode(string).decode("utf-8")
         return result
+
+    @staticmethod
+    def ss():...

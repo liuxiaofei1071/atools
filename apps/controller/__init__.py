@@ -10,3 +10,5 @@ from fastapi import APIRouter
 router = APIRouter()
 
 from apps.controller import files_manager,user,music
+from apps.controller import files_manager
+from apps.controller import driver_curd

@@ -16,6 +16,7 @@ from apps.conf.secure import (
 )
 
 
+
 def create_app():
     app = FastAPI()
 

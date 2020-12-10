@@ -73,7 +73,7 @@ def check_jwt_token(
         return payload
     except (jwt.JWTError, jwt.ExpiredSignatureError, AttributeError) as e:
         print(e)
-
+        #test
         print("token 校验出错了")
         raise credentials_exception
 

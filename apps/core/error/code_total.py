@@ -13,6 +13,7 @@ class ErrorCode:
     user_passwd_error = -5
     secret_error = -6
     access_error = -7
+    user_unknown_exception = -8
     select_already_exists = -10
     file_uploaded = -11
     file_not_supported = -12
@@ -28,6 +29,7 @@ ErrorINFO = {
     -5: "用户名密码错误",
     -6: "令牌有误,请您用正确方式登录!",
     -7: "校验访问码有误，请您用正确方式登录!",
+    -8: "用户极端异常",
     -10: "该资源已存在",
     -11: "文件已上传",
     -12: "文件类型不被支持",

@@ -67,13 +67,14 @@ def check_jwt_token(
         username, expire = payload.get("sub"), payload.get("exp")
         # https://www.jianshu.com/p/d4f9bc1d5aea
         print(username, expire)
+        user = get_user(username)
         # if user is None:
         #     raise JWTError
         print(payload)
         return payload
     except (jwt.JWTError, jwt.ExpiredSignatureError, AttributeError) as e:
         print(e)
-        #test
+
         print("token 校验出错了")
         raise credentials_exception
 

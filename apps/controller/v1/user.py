@@ -31,8 +31,8 @@ async def update_sec_code():
 async def login(
         login_model: LoginItem
 ):
-    await user_service.login_service(login_model)
-    return success()
+    data = await user_service.login_service(login_model)
+    return success(data=data)
 
 
 async def rsa():

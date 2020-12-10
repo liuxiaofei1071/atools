@@ -3,6 +3,15 @@
 # @Author:Cadman
 # @File user_service.py
 
+from datetime import datetime, timedelta
+from typing import Optional, Any, Union
+from starlette import status
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from fastapi import Header
+from apps.config import secure
+
 from apps.utils.rsa import OperateRSA
 from apps.utils.used.tools import Tools
 from apps.utils.mysql import user_sql
@@ -60,8 +69,13 @@ async def login_service(login_model):
                 # print(f"数据库存储账号：{username}")
                 # print(f"数据库存储密码：{password}")
                 if all({reduction_username == username, reduction_password == password}):
-
-                    return ErrorCode.success
+                    u_dict = user_sql.get_user_record(username)
+                    if u_dict:
+                        uid,nickname = u_dict.get('id'),u_dict.get('nick_name')
+                        access_token = create_token(uid)
+                        return {"token":access_token,"nickname":nickname}
+                    else:
+                        code = ErrorCode.user_unknown_exception
                 else:
                     code = ErrorCode.user_passwd_error
             else:
@@ -74,6 +88,26 @@ async def login_service(login_model):
     raise UnicornException(code, ErrorINFO[code])
 
 
+def create_token(
+        subject: Union[str, Any],
+        expires_delda: timedelta = None
+) -> str:
+    """
+
+    :param subject: token值
+    :param expires_delda: 过期时间
+    :return:
+    """
+    if expires_delda:
+        expire = datetime.utcnow() + expires_delda
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=secure.ACCESS_TOKEN_EXPIRE_MINUTES)
+
+    to_encode = {"exp": expire, "sub": str(subject)}
+    encode_jwt = jwt.encode(to_encode, secure.SECRET_KEY, algorithm=secure.ALGORITHM)
+    return encode_jwt
+
+
 async def generate_rsa():
     id = Tools.uid()
     public_key, private_key = OperateRSA().generate_rsa
@@ -82,3 +116,6 @@ async def generate_rsa():
         "access_id": id,
         "public_key": public_key
     }
+
+
+

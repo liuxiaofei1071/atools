@@ -4,11 +4,7 @@
 # @Email : liuxiaofeikeke@163.com
 # @File : user_sql.py
 
-# 用户模型
 from apps.core.db_future import db
-
-
-# [用户账号密码管理组]
 
 
 def create_sec_code(*args):
@@ -21,7 +17,6 @@ def create_sec_code(*args):
     return db.insert(sql, *args)
 
 
-
 def get_user_code_list(id):
     """
     查询用户管理的所有账号密码
@@ -32,7 +27,6 @@ def get_user_code_list(id):
     return db.fetch_all(sql, id)
 
 
-
 def get_user_name(id):
     """
     查询具体用户
@@ -41,6 +35,7 @@ def get_user_name(id):
     record = db.fetch_one(sql, id)
     result = record.get("login_name", "")
     return result
+
 
 def check_sec_record(cn_name):
     """
@@ -59,6 +54,7 @@ def create_rsa_record(*args):
     sql = "INSERT INTO todo_rsa(ID, `PRIVATE_KEY`, `CREATE_TIME`) VALUES (%s,%s,NOW())"
     return db.insert(sql,*args)
 
+
 def get_rsa_record(access_id):
     """
     获取rsa
@@ -68,11 +64,13 @@ def get_rsa_record(access_id):
     private_key = result.get("private_key","")
     return private_key if private_key else False
 
+
 def check_auth_record(username):
     sql = """
             SELECT `identifier`,`password` FROM todo_user_auth WHERE `identifier`=%s
     """
     return db.fetch_one(sql,username)
+
 
 def check_user_status_record(username):
     sql = """
@@ -82,6 +80,13 @@ def check_user_status_record(username):
     status = result.get("status") if result else False
     return True if status!=False else status
 
+
 def del_rsa_record(_id):
     sql = "DELETE FROM todo_rsa WHERE id=%s"
     return db.delete(sql,_id)
+
+
+def get_user_record(username):
+    print(username)
+    sql = "SELECT `id`,`nick_name` FROM todo_user WHERE `id`=(SELECT `user_id` FROM todo_user_auth WHERE identifier=%s)"
+    return db.fetch_one(sql,username)

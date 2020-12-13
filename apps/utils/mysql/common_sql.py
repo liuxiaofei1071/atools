@@ -1,0 +1,28 @@
+# _*_coding: utf-8_*_
+# @Time: 2020/12/13 23:24
+# @Author: Cadman
+# @Email: liuxiaofeikeke@163.com
+# @File: common_sql.py
+from apps.core.db_future import db
+
+class CommonSQL:
+    """
+    all sql语句集散中心
+    """
+
+    # IQ_validate
+    IQ_VALIDATE_LIST = """SELECT `id`,`question`,`answer`,`remark`,`create_time` FROM coco_home.todo_interesting_poetry"""
+    IQ_VALIDATE_BY_ID = """SELECT `id`,`question`,`answer` FROM coco_home.todo_interesting_poetry WHERE id=%s"""
+    IQ_VALIDATE_CREATE = """INSERT INTO coco_home.todo_interesting_poetry
+                                (`id`,`question`,`answer`,`remark`,`create_time`,`create_by`)
+                            VALUES (%s,%s,%s,%s,NOW(),'admin')"""
+    IQ_VALIDATE_DIFF_BY_QUESTION = """SELECT COUNT(*) as number  FROM coco_home.todo_interesting_poetry
+                                      WHERE `question`=%s"""
+
+class CommonFunc:
+    @staticmethod
+    def kill_repeat(sql,*args):
+        """文件类型校验去重"""
+        result = db.fetch_one(sql,args)
+        count = result.get("number")
+        return True if count == 0 else False

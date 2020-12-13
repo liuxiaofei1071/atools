@@ -9,6 +9,12 @@ from typing import Optional
 from pydantic import BaseModel, validator, conint
 
 
+class IQValidateItem(BaseModel):
+    question:str
+    answer:str
+    remark:Optional[str]=None
+    
+
 class LoginItem(BaseModel):
     username: str
     password: str

@@ -126,7 +126,6 @@ class MysqlPool(object):
         try:
             self.cursor.execute(sql, args)
             self.conn.commit()
-            return self.conn.affected_rows()
         except Exception as e:
             self.conn.rollback()
             logger.exception(e)

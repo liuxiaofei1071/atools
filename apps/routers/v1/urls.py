@@ -13,7 +13,8 @@ from apps.controller.v1 import (
     user,
     host_server,
     test_api,
-    hardware_kind
+    hardware_kind,
+    interesting_iq
 )
 
 router = APIRouter()
@@ -68,5 +69,11 @@ router.get("/hardware/second/list", summary="[自古中秋月最明,凉风届候
     hardware_kind.get_hardware_second_list)
 router.get("/hardware/list", summary="[人生固有一死,或重于泰山,或轻于鸿毛] 全查", tags=["硬件库"])(hardware_kind.get_hardware_list)
 router.post("/hardware/create", summary="[待到秋来九月八,我花开罢百花杀] 增", tags=["硬件库"])(hardware_kind.hardware_create)
-# router.delete("/kind", summary="[余忆童稚时,能张目对日,明察秋毫] 单删", tags=["服务器"], )(kind.del_host_server)
-# router.put("/kind",summary="[天下难事,皆在人为] 更新", tags=["服务器"]) (kind.update_host_server)
+
+
+#其他模块
+router.post("/iq/validate", summary="[熟读唐诗三百首,不会做诗也会吟] 增", tags=["其他-IQ"])(interesting_iq.create_validate)
+router.get("/iq/validate", summary="[熟读唐诗三百首,不会做诗也会吟] 增", tags=["其他-IQ"])(interesting_iq.get_validate)
+router.get("/iq/validate/list", summary="[读万卷书,行万里里] 全查", tags=["其他-IQ"])(interesting_iq.get_validate_list)
+router.delete("/iq/validate", summary="[天涯地角有穷时,只有相思无尽处] 单删", tags=["其他-IQ"], )(interesting_iq.del_validate)
+router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花] 更新", tags=["其他-IQ"])(interesting_iq.update_validate)

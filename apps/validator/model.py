@@ -8,6 +8,8 @@ import re
 from typing import Optional
 from pydantic import BaseModel, validator, conint
 
+class AnswerItem(BaseModel):
+    answer: str
 
 class IQValidateItem(BaseModel):
     question:str

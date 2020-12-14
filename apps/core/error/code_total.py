@@ -14,11 +14,13 @@ class ErrorCode:
     secret_error = -6
     access_error = -7
     user_unknown_exception = -8
+    sql_execute_error = -9
     select_already_exists = -10
     file_uploaded = -11
     file_not_supported = -12
+    no_resources = -13
     server_not_bind_services = -20
-
+    IQ_verification_failed = -30
 
 ErrorINFO = {
     0: "",
@@ -30,9 +32,11 @@ ErrorINFO = {
     -6: "令牌有误,请您用正确方式登录!",
     -7: "校验访问码有误，请您用正确方式登录!",
     -8: "用户极端异常",
+    -9: "操作数据执行有误",
     -10: "该资源已存在",
     -11: "文件已上传",
     -12: "文件类型不被支持",
-    -20: "服务器未绑定服务"
-
+    -13:"没有资源",
+    -20: "服务器未绑定服务",
+    -30:"IQ校验未通过"
 }

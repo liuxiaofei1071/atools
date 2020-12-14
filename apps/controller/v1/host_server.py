@@ -44,7 +44,7 @@ async def update_host_server(
 ):
     await host_server_service.update_one(host_server_model, _id)
     return success()
-    pass
+
 
 
 async def del_host_server(

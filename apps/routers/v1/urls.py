@@ -73,7 +73,9 @@ router.post("/hardware/create", summary="[待到秋来九月八,我花开罢百�
 
 #其他模块
 router.post("/iq/validate", summary="[熟读唐诗三百首,不会做诗也会吟] 增", tags=["其他-IQ"])(interesting_iq.create_validate)
-router.get("/iq/validate", summary="[熟读唐诗三百首,不会做诗也会吟] 增", tags=["其他-IQ"])(interesting_iq.get_validate)
+router.get("/iq/validate", summary="[山有桥松,隰有游龙] 查", tags=["其他-IQ"])(interesting_iq.get_validate)
+router.get("/iq/question", summary="[熟读唐诗三百首,不会做诗也会吟] 查", tags=["其他-IQ"])(interesting_iq.get_question)
+router.post("/iq/answer", summary="[熟读唐诗三百首,不会做诗也会吟] 校验", tags=["其他-IQ"])(interesting_iq.answer_validate)
 router.get("/iq/validate/list", summary="[读万卷书,行万里里] 全查", tags=["其他-IQ"])(interesting_iq.get_validate_list)
 router.delete("/iq/validate", summary="[天涯地角有穷时,只有相思无尽处] 单删", tags=["其他-IQ"], )(interesting_iq.del_validate)
 router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花] 更新", tags=["其他-IQ"])(interesting_iq.update_validate)

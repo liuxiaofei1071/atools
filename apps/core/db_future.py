@@ -89,7 +89,7 @@ class MysqlPool(object):
             self.cursor = self.conn.cursor()
             row = self.cursor.execute(sql, args)
             self.conn.commit()
-            return row
+            return 1
         except Exception as e:
             logger.error(e)
             self.conn.rollback()
@@ -108,12 +108,33 @@ class MysqlPool(object):
         try:
             self.cursor.execute(sql, args)
             self.conn.commit()
+            return 1
         except Exception as e:
             logger.exception(e)
             self.conn.rollback()
             return 0
         finally:
             self.cursor.close()
+
+    def delete_many(self,sql,args):
+        """
+        删除多条记录
+        :param sql:
+        :param args: 条件
+        :return:
+        """
+        self.cursor = self.conn.cursor()
+        try:
+            self.cursor.executemany(sql, args)
+            self.conn.commit()
+            return 1
+        except Exception as e:
+            logger.exception(e)
+            self.conn.rollback()
+            return 0
+        finally:
+            self.cursor.close()
+
 
     def update(self, sql, *args):
         """
@@ -126,6 +147,7 @@ class MysqlPool(object):
         try:
             self.cursor.execute(sql, args)
             self.conn.commit()
+            return 1
         except Exception as e:
             self.conn.rollback()
             logger.exception(e)

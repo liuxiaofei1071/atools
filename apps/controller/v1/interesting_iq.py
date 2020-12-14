@@ -7,7 +7,7 @@
 from typing import Optional
 from fastapi import Query
 
-from apps.validator.model import IQValidateItem
+from apps.validator.model import IQValidateItem,AnswerItem
 from apps.service import validate_service
 from apps.core.error.code_total import ErrorCode,ErrorINFO
 from apps.core.base_response import success,fail
@@ -31,8 +31,23 @@ async def get_validate(
     else:
         return success(data=result)
 
-async def del_validate():
-    pass
+async def del_validate(
+    _id: Optional[str] = Query(None, min_length=3, max_length=50)
+):
+    await validate_service.del_one(_id)
+    return success()
 
-async def update_validate():
-    pass
+async def update_validate(
+    validate_model: IQValidateItem,
+    _id: Optional[str] = Query(None, min_length=3, max_length=50)
+):
+    await validate_service.update_one(validate_model, _id)
+    return success()
+
+async def get_question():
+    data = await validate_service.random_question()
+    return success(data=data)
+
+async def answer_validate(answer_model:AnswerItem,_id: Optional[str] = Query(None, min_length=3, max_length=50)):
+    await validate_service.answer(answer_model,_id)
+    return success()

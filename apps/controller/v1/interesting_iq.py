@@ -48,6 +48,6 @@ async def get_question():
     data = await validate_service.random_question()
     return success(data=data)
 
-async def answer_validate(answer_model:AnswerItem,_id: Optional[str] = Query(None, min_length=3, max_length=50)):
-    await validate_service.answer(answer_model,_id)
+async def answer_validate(answer_model:AnswerItem):
+    await validate_service.answer(answer_model)
     return success()

@@ -61,9 +61,10 @@ async def random_question():
     code = ErrorCode.no_resources
     raise UnicornException(code,ErrorINFO[code])
 
-async def answer(answer_model,_id):
+async def answer(answer_model):
+    id = answer_model.id
     answer = answer_model.answer
-    result = db.fetch_one(CommonSQL.IQ_VALIDATE_ANSWER,_id,answer)
+    result = db.fetch_one(CommonSQL.IQ_VALIDATE_ANSWER,id,answer)
     if result:
         return ErrorCode.success
     code = ErrorCode.IQ_verification_failed

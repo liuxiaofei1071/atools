@@ -9,6 +9,7 @@ from typing import Optional
 from pydantic import BaseModel, validator, conint
 
 class AnswerItem(BaseModel):
+    id:str
     answer: str
 
 class IQValidateItem(BaseModel):

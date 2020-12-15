@@ -26,7 +26,7 @@ def success(data=None, msg=""):
 
 def fail(status=-1, msg='', data=None):
     """失败返回格式"""
-    return base_response(status, msg, data)
+    return base_response(data=data,status=status,msg=msg)
 
 
 class UnicornException(Exception):

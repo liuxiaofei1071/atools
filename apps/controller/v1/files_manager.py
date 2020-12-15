@@ -10,8 +10,8 @@ from apps.core.base_response import success
 from apps.service.file_manager_service import upload
 
 
-async def create_upload_file(files: List[UploadFile] = File(...), ):
-    data = await upload(files)
+async def create_upload_file(file: UploadFile = File(...), ):
+    data = await upload(file)
     return success(data=data)
 
 

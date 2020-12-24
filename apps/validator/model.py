@@ -8,6 +8,15 @@ import re
 from typing import Optional
 from pydantic import BaseModel, validator, conint
 
+
+class ScriptItem(BaseModel):
+    user:str
+    name:str
+    py_version:str
+    resource_id:Optional[str] = None
+    remark:Optional[str] = None
+    status:Optional[int] = None
+
 class AnswerItem(BaseModel):
     id:str
     answer: str

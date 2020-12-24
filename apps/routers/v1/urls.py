@@ -14,7 +14,8 @@ from apps.controller.v1 import (
     host_server,
     test_api,
     hardware_kind,
-    interesting_iq
+    interesting_iq,
+    agent,
 )
 
 router = APIRouter()
@@ -45,7 +46,7 @@ router.put("/song", summary="[蒹葭苍苍,白露为霜,所谓伊人,在水一�
 # 书籍模块
 
 # 用户模块 登陆|注册
-router.get("/rsa/publickey", summary="[空山新雨后，天气晚来秋] 获取公钥", tags=["用户-秘钥"])(user.rsa)
+router.get("/secret", summary="[空山新雨后，天气晚来秋] 获取公钥", tags=["用户-秘钥"])(user.rsa)
 router.get("/code/list", summary="[蜀道难，难于上青天] 全查", tags=["用户"])(user.get_sec_code_list)
 router.post("/user/code", summary="[面朝大海，春暖花开] 增（sec）", tags=["用户"])(user.create_sec_code)
 router.post("/login", summary="[十重秘钥] 增（sec）", tags=["用户"])(user.login)
@@ -79,3 +80,10 @@ router.post("/iq/answer", summary="[熟读唐诗三百首,不会做诗也会吟]
 router.get("/iq/validate/list", summary="[读万卷书,行万里里] 全查", tags=["其他-IQ"])(interesting_iq.get_validate_list)
 router.delete("/iq/validate", summary="[天涯地角有穷时,只有相思无尽处] 单删", tags=["其他-IQ"], )(interesting_iq.del_validate)
 router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花] 更新", tags=["其他-IQ"])(interesting_iq.update_validate)
+
+#驱动模块
+#agent 子模块
+router.get("/script/list", summary="[] 全查", tags=["驱动-script"])(agent.get_script_list)
+router.get("/script/code", summary="[] 全查", tags=["驱动-script"])(agent.get_script_code)
+router.post("/script", summary="[] 增", tags=["驱动-script"])(agent.create_script)
+router.put("/script", summary="[] 改", tags=["驱动-script"])(agent.update_script)

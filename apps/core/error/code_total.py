@@ -19,6 +19,7 @@ class ErrorCode:
     file_uploaded = -11
     file_not_supported = -12
     no_resources = -13
+    py_resources_error = -14
     server_not_bind_services = -20
     IQ_verification_failed = -30
 
@@ -37,6 +38,7 @@ ErrorINFO = {
     -11: "文件已上传",
     -12: "文件类型不被支持",
     -13:"没有资源",
+    -14:"选择py资源错误",
     -20: "服务器未绑定服务",
     -30:"IQ校验未通过"
 }

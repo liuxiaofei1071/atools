@@ -3,6 +3,7 @@
 # @Author: Cadman
 # @Email: liuxiaofeikeke@163.com
 # @File: validate_service.py
+
 import random
 
 from apps.core.db_future import db
@@ -17,8 +18,8 @@ async def create(validate_model):
     answer = validate_model.answer
     remark = validate_model.remark
 
-    id = Tools.uid()
-    status = CommonFunc.kill_repeat(CommonSQL.IQ_VALIDATE_DIFF_BY_QUESTION, question)
+    id = Tools.uid
+    status = CommonFunc.check_repeat(CommonSQL.IQ_VALIDATE_CHECK, question)
     if status:
         db.insert(CommonSQL.IQ_VALIDATE_CREATE, id, question, answer, remark)
     else:
@@ -26,24 +27,24 @@ async def create(validate_model):
         raise UnicornException(code, ErrorINFO[code])
 
 
-async def get_all():
+async def read_list():
     result = db.fetch_all(CommonSQL.IQ_VALIDATE_GET_LIST)
     return result if result else []
 
 
-async def get_one(id):
+async def read(id):
     result = db.fetch_one(CommonSQL.IQ_VALIDATE_GET_ONE, id)
     return result if result else None
 
 
-async def del_one(id):
+async def delete(id):
     if db.delete(CommonSQL.IQ_VALIDATE_DEL_ONE, id):
         return ErrorCode.success
     code = ErrorCode.sql_execute_error
     raise UnicornException(code, ErrorINFO[code])
 
 
-async def update_one(validate_model, _id):
+async def update(validate_model, _id):
     question = validate_model.question
     answer = validate_model.answer
     remark = validate_model.remark
@@ -53,7 +54,6 @@ async def update_one(validate_model, _id):
     raise UnicornException(code, ErrorINFO[code])
 
 async def random_question():
-
     question_list = db.fetch_all(CommonSQL.IQ_VALIDATE_ALL_ID)
     if question_list:
         random_id = random.choice(question_list).get('id')

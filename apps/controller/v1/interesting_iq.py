@@ -13,7 +13,7 @@ from apps.core.error.code_total import ErrorCode,ErrorINFO
 from apps.core.base_response import success,fail
 
 async def get_validate_list():
-    data = await validate_service.get_all()
+    data = await validate_service.read_list()
     return success(data=data)
 
 async def create_validate(validate_model:IQValidateItem):
@@ -24,7 +24,7 @@ async def get_validate(
         _id: Optional[str] = Query(None, min_length=3, max_length=50)
 
 ):
-    result = await validate_service.get_one(_id)
+    result = await validate_service.read(_id)
     if result is None:
         code = ErrorCode.select_resource_null
         return fail(code, msg=ErrorINFO[code])
@@ -34,14 +34,14 @@ async def get_validate(
 async def del_validate(
     _id: Optional[str] = Query(None, min_length=3, max_length=50)
 ):
-    await validate_service.del_one(_id)
+    await validate_service.delete(_id)
     return success()
 
 async def update_validate(
     validate_model: IQValidateItem,
     _id: Optional[str] = Query(None, min_length=3, max_length=50)
 ):
-    await validate_service.update_one(validate_model, _id)
+    await validate_service.update(validate_model, _id)
     return success()
 
 async def get_question():

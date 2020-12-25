@@ -16,6 +16,7 @@ class ScriptItem(BaseModel):
     resource_id:Optional[str] = None
     remark:Optional[str] = None
     status:Optional[int] = None
+    create_by:str
 
 class AnswerItem(BaseModel):
     id:str

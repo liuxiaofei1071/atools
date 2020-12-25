@@ -13,17 +13,20 @@ from apps.core.base_response import fail
 from apps.validator.model import ScriptItem
 
 
+
 async def get_script_list():
-    data = await agent_service.script_all()
+    data = await agent_service.read_list()
     return success(data=data)
 
 async def get_script_code(_id: Optional[str] = Query(None, min_length=3, max_length=50)):
-    result = await agent_service.script_code(_id)
+    result = await agent_service.script_detail(_id)
     return success(data=result)
 
 async def create_script(py_model:ScriptItem):
     data = await agent_service.create(py_model)
     return success(data=data)
 
-async def update_script():
-    pass
+async def update_script(*,script_id:str,py_model:ScriptItem):
+
+    data = await agent_service.update(script_id,py_model)
+    return success(data=data)

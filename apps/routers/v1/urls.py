@@ -86,4 +86,4 @@ router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花
 router.get("/script/list", summary="[] 全查", tags=["驱动-script"])(agent.get_script_list)
 router.get("/script/code", summary="[] 全查", tags=["驱动-script"])(agent.get_script_code)
 router.post("/script", summary="[] 增", tags=["驱动-script"])(agent.create_script)
-router.put("/script", summary="[] 改", tags=["驱动-script"])(agent.update_script)
+router.put("/script/{script_id}", summary="[] 改", tags=["驱动-script"])(agent.update_script)

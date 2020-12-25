@@ -19,10 +19,9 @@ class Tools:
         uid_name = f"{str(_uid).replace('-','')}"+"."+ filename.split('.')[1]
         return uid_name
 
-    @staticmethod
-    def uid():
-        uid = f"{str(uuid.uuid4()).replace('-','')}"
-        return uid
+    @property
+    def uid(self):
+        return str(uuid.uuid4()).replace('-','')
 
     @staticmethod
     def sha1_salt(salt):

@@ -33,3 +33,28 @@ for msg in consumer:
 
 
 """
+class Parent:
+    def __init__(self,x):
+        self.x = x
+
+    def hello(self,a):
+        print('我是父亲',a,self.x)
+
+
+class Child(Parent):
+
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        super(Child, self).__init__(x)
+
+    # child类继承与 parent类
+    def hello(self,b):
+        # parent类中有hello方法，但是这里也定义了一个hello方法。
+        # 覆盖,但是父类方法不受影响
+        super(Child, self).hello(b)
+        print("我是孩子",b,self.x,self.y)
+
+
+
+        

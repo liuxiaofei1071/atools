@@ -17,11 +17,13 @@ async def create(validate_model):
     question = validate_model.question
     answer = validate_model.answer
     remark = validate_model.remark
+    kind = validate_model.kind
+    create_by = validate_model.create_by
 
-    id = Tools.uid
+    id = Tools.uid()
     status = CommonFunc.check_repeat(CommonSQL.IQ_VALIDATE_CHECK, question)
     if status:
-        db.insert(CommonSQL.IQ_VALIDATE_CREATE, id, question, answer, remark)
+        db.insert(CommonSQL.IQ_VALIDATE_CREATE, id, question, answer, remark,kind,create_by)
     else:
         code = ErrorCode.select_already_exists
         raise UnicornException(code, ErrorINFO[code])

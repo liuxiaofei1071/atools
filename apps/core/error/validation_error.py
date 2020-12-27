@@ -19,7 +19,7 @@ async def http422_error_handler(_: Request, exc: Union[RequestValidationError, V
             "message": "参数校验错误",
             "data": exc.errors(),
         },
-        status_code=200,
+        status_code=422,
     )
 
 

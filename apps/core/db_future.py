@@ -4,8 +4,11 @@
 # @File db_future.py
 
 import pymysql
+
 from DBUtils.PooledDB import PooledDB
 from apps.config.settings import logger
+from apps.core.base_response import UnicornException
+from apps.core.error.code_total import StatusCode
 from apps.config.secure import (
     DB_USER,
     DB_HOST,
@@ -58,7 +61,7 @@ class MysqlPool(object):
         except Exception as e:
             print(e)
             logger.error(e)
-            raise Exception(e)
+            raise e
 
     def __new__(cls, *args, **kw):
         '''
@@ -87,13 +90,12 @@ class MysqlPool(object):
         '''
         try:
             self.cursor = self.conn.cursor()
-            row = self.cursor.execute(sql, args)
+            self.cursor.execute(sql, args)
             self.conn.commit()
-            return 1
         except Exception as e:
-            logger.error(e)
             self.conn.rollback()
-            return 0
+            logger.exception(e)
+            raise UnicornException(StatusCode.C10001['code'],StatusCode.C10001['msg'])
         finally:
             self.cursor.close()
 
@@ -108,11 +110,10 @@ class MysqlPool(object):
         try:
             self.cursor.execute(sql, args)
             self.conn.commit()
-            return 1
         except Exception as e:
             logger.exception(e)
             self.conn.rollback()
-            return 0
+            raise UnicornException(StatusCode.C10003['code'],StatusCode.C10003['msg'])
         finally:
             self.cursor.close()
 
@@ -127,11 +128,10 @@ class MysqlPool(object):
         try:
             self.cursor.executemany(sql, args)
             self.conn.commit()
-            return 1
         except Exception as e:
             logger.exception(e)
             self.conn.rollback()
-            return 0
+            raise UnicornException(StatusCode.C10003['code'],StatusCode.C10003['msg'])
         finally:
             self.cursor.close()
 
@@ -147,11 +147,10 @@ class MysqlPool(object):
         try:
             self.cursor.execute(sql, args)
             self.conn.commit()
-            return 1
         except Exception as e:
             self.conn.rollback()
             logger.exception(e)
-            return 0
+            raise UnicornException(StatusCode.C10002['code'],StatusCode.C10002['msg'])
         finally:
             self.cursor.close()
 
@@ -169,7 +168,7 @@ class MysqlPool(object):
             return result if result else {}
         except Exception as e:
             logger.exception(e)
-            return {}
+            raise UnicornException(StatusCode.C10004['code'],StatusCode.C10004['msg'])
         finally:
             self.cursor.close()
 
@@ -187,11 +186,10 @@ class MysqlPool(object):
                 self.cursor.execute(sql, args)
             else:
                 self.cursor.execute(sql)
-            record_list = self.cursor.fetchall()
-            return record_list
+            return self.cursor.fetchall()
         except Exception as e:
             logger.exception(e)
-            return []
+            raise UnicornException(StatusCode.C10005['code'],StatusCode.C10005['msg'])
         finally:
             self.cursor.close()
 

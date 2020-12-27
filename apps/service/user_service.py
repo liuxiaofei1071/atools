@@ -73,7 +73,7 @@ async def login_service(login_model):
                     if u_dict:
                         uid,nickname = u_dict.get('id'),u_dict.get('nick_name')
                         access_token = create_token(uid)
-                        return {"token":access_token,"nickname":nickname}
+                        return {"token":access_token,"nickname":nickname,"user_id":uid}
                     else:
                         code = ErrorCode.user_unknown_exception
                 else:

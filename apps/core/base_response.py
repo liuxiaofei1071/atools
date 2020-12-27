@@ -6,7 +6,7 @@
 """基准返回结构定义"""
 
 
-def base_response(status, data=None, msg=None):
+def base_response(status,msg=None, data=None):
     """基础返回格式"""
 
     _data = {} if data is None else data
@@ -19,14 +19,14 @@ def base_response(status, data=None, msg=None):
     }
 
 
-def success(data=None, msg=""):
+def success(data=None):
     """成功返回格式"""
-    return base_response(status=0, data=data, msg=msg)
+    return base_response(status=10000, data=data, msg="Success")
 
 
-def fail(status=-1, msg='', data=None):
+def fail(status, msg='', data=None):
     """失败返回格式"""
-    return base_response(data=data,status=status,msg=msg)
+    return base_response(status,msg,data)
 
 
 class UnicornException(Exception):

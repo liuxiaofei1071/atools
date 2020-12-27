@@ -19,8 +19,8 @@ class Tools:
         uid_name = f"{str(_uid).replace('-','')}"+"."+ filename.split('.')[1]
         return uid_name
 
-    @property
-    def uid(self):
+    @staticmethod
+    def uid():
         return str(uuid.uuid4()).replace('-','')
 
     @staticmethod
@@ -39,4 +39,10 @@ class Tools:
         return result
 
     @staticmethod
-    def ss():...
+    def date_format(dt):
+        return f"{dt.year}-{dt.month}-{dt.day} {dt.hour}:{str(dt.minute).zfill(2)}:{str(dt.second).zfill(2)}"
+
+
+a = "1"
+print(a.zfill(2))
+

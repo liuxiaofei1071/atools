@@ -82,8 +82,11 @@ router.delete("/iq/validate", summary="[天涯地角有穷时,只有相思无尽
 router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花] 更新", tags=["其他-IQ"])(interesting_iq.update_validate)
 
 #驱动模块
-#agent 子模块
-router.get("/script/list", summary="[] 全查", tags=["驱动-script"])(agent.get_script_list)
-router.get("/script/code", summary="[] 全查", tags=["驱动-script"])(agent.get_script_code)
-router.post("/script", summary="[] 增", tags=["驱动-script"])(agent.create_script)
-router.put("/script/{script_id}", summary="[] 改", tags=["驱动-script"])(agent.update_script)
+#------------------agent 子模块---------------------------------------
+router.get("/script/list", summary="[] 全查", tags=["驱动-agent"])(agent.get_script_list)
+router.post("/script", summary="[] 增", tags=["驱动-agent"])(agent.create_script)
+router.put("/script/{script_id}", summary="[] 改", tags=["驱动-agent"])(agent.update_script)
+router.delete("/script/", summary="[] 改", tags=["驱动-agent"])(agent.del_script)
+
+router.get("/script/code", summary="[] 单查", tags=["驱动-code"])(agent.get_script_code)
+router.put("/script/code/{code_id}", summary="[] 改", tags=["驱动-code"])(agent.update_script_code)

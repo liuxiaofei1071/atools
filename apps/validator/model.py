@@ -8,15 +8,23 @@ import re
 from typing import Optional
 from pydantic import BaseModel, validator, conint
 
+class AgentCode(BaseModel):
+    code:str
 
-class ScriptItem(BaseModel):
-    user:str
+class ScriptModel(BaseModel):
     name:str
     py_version:str
     resource_id:Optional[str] = None
     remark:Optional[str] = None
-    status:Optional[int] = None
     create_by:str
+
+class ScriptUpdateModel(BaseModel):
+    name:str
+    py_version : str
+    remark: Optional[str] = None
+    status: conint(le=1, ge=0)
+    update_by:str
+    resource_id:Optional[str] = None
 
 class AnswerItem(BaseModel):
     id:str
@@ -25,7 +33,9 @@ class AnswerItem(BaseModel):
 class IQValidateItem(BaseModel):
     question:str
     answer:str
+    kind: str
     remark:Optional[str]=None
+    create_by:Optional[str]=None
     
 
 class LoginItem(BaseModel):

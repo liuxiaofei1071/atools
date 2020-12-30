@@ -30,7 +30,7 @@ async def create(py_model):
     _remark = py_model.remark
     _resource_id = py_model.resource_id
     _user = py_model.create_by
-
+    print(_name,111)
     id = Tools.uid()
     status = CommonFunc.check_repeat(CommonSQL.AGENT_SCRIPT_CHECK,_name)
     if status:

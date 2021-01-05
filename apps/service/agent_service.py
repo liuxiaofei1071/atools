@@ -8,7 +8,7 @@ import os
 from apps.core.db_future import db
 from apps.core.base_response import UnicornException
 from apps.core.error.code_total import StatusCode
-from apps.utils.mysql.common_sql import CommonSQL,CommonFunc
+from apps.utils.mysql.common_sql import CommonSQL
 from apps.utils.used.tools import Tools
 
 async def read_list():
@@ -30,12 +30,11 @@ async def create(py_model):
     _remark = py_model.remark
     _resource_id = py_model.resource_id
     _user = py_model.create_by
-    print(_name,111)
+
     id = Tools.uid()
-    status = CommonFunc.check_repeat(CommonSQL.AGENT_SCRIPT_CHECK,_name)
+    status = CommonSQL.check_repeat(CommonSQL.AGENT_SCRIPT_CHECK,_name)
     if status:
         _user_id = db.fetch_one(CommonSQL.GET_USER_ID,_user)
-        print(_user_id,"----")
         if _user_id:
             user_id = _user_id.get("id")
             db.insert(CommonSQL.AGENT_SCRIPT_CREATE,id,_name,_version,_remark,_resource_id,user_id)
@@ -89,12 +88,9 @@ async def code_detail(id):
 
 async def update_code(id,code_model):
     code = code_model.code
-    print(id,9000)
     _path = db.fetch_one(CommonSQL.AGENT_SCRIPT_CODE, id)
-    print(_path,222223332)
     if _path:
         path = _path.get("path")
-        print(path, 111)
         if os.path.exists(path):
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(code)

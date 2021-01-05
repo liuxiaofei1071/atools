@@ -5,29 +5,28 @@
 
 import os
 
-from apps.core.error.code_total import ErrorCode, ErrorINFO
+from apps.core.db_future import MysqlPool
+from apps.core.error.code_total import StatusCode
 from apps.core.base_response import UnicornException
 from apps.config.settings import TypePath, RESOURCE_PATH
 from apps.utils.used.tools import Tools
-from apps.utils.mysql import resource_sql, content_type_sql
+from apps.utils.parse import Parse
+from apps.utils.mysql.common_sql import CommonSQL
 
 
 async def upload(file):
-
     filename, content_type = file.filename, file.content_type
-    print(filename,content_type)
-    if "." in filename:
-        # 拆分文件名称和后缀名
-        start_index = filename.rindex('.')
-        file_name = filename[:start_index]
-        file_suffix = f".{filename[start_index + 1:]}"
-    else:
-        # 文件无后缀名,流文件校验
-        file_suffix = ""
-        file_name = filename
+    print(filename, content_type)
+
+    file_name,file_suffix = Parse.file2name_suffix(filename)
+
+    # mysql connection
+    db_conn = MysqlPool()
+
     # 获取文件名称
-    dir_name_dict = content_type_sql.select_content_dir_record(content_type, file_suffix)
-    dir_name = dir_name_dict.get("name", "")
+    result = db_conn.fetch_one(CommonSQL.TYPE_NAME, content_type, file_suffix)
+    dir_name = result.get("name", "")
+
     # 校验目录是否为系统支持资源目录
     if dir_name in TypePath:
         _directory_name_path = os.path.join(RESOURCE_PATH, dir_name)
@@ -42,25 +41,26 @@ async def upload(file):
         filename_full_path = os.path.join(_directory_name_path, u_filename)
 
         # 校验是否需要创建资源记录
-        if resource_sql.check_a_file(file_name):
+        if CommonSQL.check_repeat(db_conn, CommonSQL.FILENAME_CHECK, file_name):
             resource_id = Tools.uid()
             file_data = await file.read()
             with open(filename_full_path, 'wb') as f:
                 f.write(file_data)
+
+            # 获取文件大小
             size = os.path.getsize(filename_full_path)
-            resource_sql.create_file(resource_id, file_name, size, file_suffix, filename_full_path)
 
-            response = {}
-            response["id"] = resource_id
-            response["path"] = filename_full_path
-            response["filename"] = filename
-            response["content_type"] = content_type
-            response["size"] = size  # 文件大小bit
-            return response
+            db_conn.insert(CommonSQL.RESOURCE_CREATE, resource_id, file_name, size, file_suffix, filename_full_path)
+            db_conn.close()
+
+            return {
+                "id", resource_id,
+                "path", filename_full_path,
+                "filename", filename,
+                "content_type", content_type,
+                "size", size,
+            }
         else:
-            code = ErrorCode.file_uploaded
-            raise UnicornException(code, filename + ErrorINFO[code])
+            raise UnicornException(StatusCode.R20004["code"], filename + StatusCode.R20004["msg"])
     else:
-        code = ErrorCode.file_not_supported
-        raise UnicornException(code, filename + ErrorINFO[code])
-
+        raise UnicornException(StatusCode.R20003["code"], filename + StatusCode.R20003["msg"])

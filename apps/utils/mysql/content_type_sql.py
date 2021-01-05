@@ -4,8 +4,9 @@
 # @File content_type_sql.py
 
 # 文件类型模型
-from apps.core.db import db
+from apps.core.db import MySQLDB
 
+db = MySQLDB()
 
 # [类型管理组]
 

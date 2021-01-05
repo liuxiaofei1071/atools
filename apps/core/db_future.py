@@ -21,10 +21,9 @@ from apps.config.secure import (
 连接池
 '''
 
-
 class MysqlPool(object):
 
-    def __init__(self, host, port, user, password, database):
+    def __init__(self):
         self.POOL = PooledDB(
             creator=pymysql,  # 使用链接数据库的模块
             maxconnections=6,  # 连接池允许的最大连接数，0和None表示不限制连接数
@@ -49,11 +48,11 @@ class MysqlPool(object):
             # 4 = when a query is executed,
             # 7 = always
 
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            database=database,
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DATABASE,
             charset='utf8'
         )
         try:
@@ -74,7 +73,7 @@ class MysqlPool(object):
             cls._instance = object.__new__(cls)
         return cls._instance
 
-    def connect_close(self):
+    def close(self):
         '''
         关闭连接
         :return:
@@ -98,6 +97,8 @@ class MysqlPool(object):
             raise UnicornException(StatusCode.C10001['code'],StatusCode.C10001['msg'])
         finally:
             self.cursor.close()
+
+
 
     def delete(self, sql, args):
         """
@@ -194,10 +195,4 @@ class MysqlPool(object):
             self.cursor.close()
 
 
-db = MysqlPool(
-    host=DB_HOST,
-    port=DB_PORT,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DATABASE
-)
+db = MysqlPool()

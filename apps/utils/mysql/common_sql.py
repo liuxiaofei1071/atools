@@ -3,13 +3,19 @@
 # @Author: Cadman
 # @Email: liuxiaofeikeke@163.com
 # @File: common_sql.py
-from apps.core.db_future import db
 
 
 class CommonSQL:
     """
     sql语句集散中心
     """
+
+    @staticmethod
+    def check_repeat(db_obj,sql,*args):
+        """校验去重"""
+        result = db_obj.fetch_one(sql, args)
+        count = result.get("number")
+        return True if count == 0 else False
 
     #用户
     GET_USER_ID = "SELECT `id` FROM todo_user WHERE `id`=%s"
@@ -45,10 +51,13 @@ class CommonSQL:
     AGENT_SCRIPT_ONE = "SELECT * FROM drive_py_script WHERE `id`=%s AND is_del=0"
     AGENT_SCRIPT_DEL = "DELETE FROM cocoa.drive_py_script WHERE id=%s"
 
-class CommonFunc:
-    @staticmethod
-    def check_repeat(sql, *args):
-        """文件类型校验去重"""
-        result = db.fetch_one(sql, args)
-        count = result.get("number")
-        return True if count == 0 else False
+    #类型相关
+
+    TYPE_NAME = "SELECT `name` FROM cocoa.cc_content_type WHERE `filetype`=%s AND `suffix`=%s"
+    TYPE_CHECK ="SELECT COUNT(*) as number  FROM cocoa.cc_content_type WHERE `filetype`=%s AND `suffix`=%s"
+
+    #资源相关
+    FILENAME_CHECK = "SELECT COUNT(*) AS number FROM cc_resource WHERE `filename`=%s"
+    RESOURCE_CREATE = """INSERT INTO cc_resource
+                (`id`,`filename`,`size`,`suffix`,`path`,`create_by`,`create_time`,`update_by`,`update_time`)
+            VALUES (%s,%s,%s,%s,%s,'admin',now(),'admin',now())"""

@@ -20,12 +20,12 @@ from apps.config.secure import (
 class MySQLDB:
     """创建一个基于pymysql的操作类 主要用于对数据的增删改查"""
 
-    def __init__(self, host, port, user, password, database):
-        self.host = host
-        self.port = port
-        self.user = user
-        self.password = password
-        self.database = database
+    def __init__(self):
+        self.host = DB_HOST
+        self.port = DB_PORT
+        self.user = DB_USER
+        self.password = DB_PASSWORD
+        self.database = DATABASE
         try:
             # 获取数据库连接/句柄
             self.coon = pymysql.connect(
@@ -33,10 +33,12 @@ class MySQLDB:
                 port=self.port,
                 user=self.user,
                 password=self.password,
-                database=self.database
+                database=self.database,
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
             )
             # 获取游标
-            self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
+            # self.cursor = self.coon.cursor(cursor=pymysql.cursors.DictCursor)
         except Exception as e:
             logger.error(e)
 
@@ -53,15 +55,24 @@ class MySQLDB:
 
     def insert(self, sql, *args):
         """新增"""
+        # try:
+        #     self.cursor = self.coon.cursor()
+        #     self.cursor.execute(sql, args)
+        #     self.coon.commit()
+        #     return self.cursor.lastrowid
+        # except Exception as e:
+        #     logger.error(e)
+        #     self.coon.rollback()
+        #     return 0
         try:
-            self.cursor = self.coon.cursor()
-            self.cursor.execute(sql, args)
+            with self.coon.cursor() as cursor:
+                cursor.execute(sql,args)
             self.coon.commit()
-            return self.cursor.lastrowid
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
             self.coon.rollback()
-            return 0
+        finally:
+            self.coon.close()
 
     def delete(self, sql, params):
         """删除"""

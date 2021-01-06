@@ -146,10 +146,3 @@ class MySQLDB:
             logger.error(e)
 
 
-db = MySQLDB(
-    host=DB_HOST,
-    port=DB_PORT,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DATABASE
-)

@@ -2,7 +2,7 @@
 # @Time:2020/11/14 11:50
 # @Author:Cadman
 # @File host_server_sql.py
-from apps.core.db import db
+from apps.core.db_future import db
 
 
 # def create_host_server_record(id, name, ip, version, memory, cpu, sys_status, effect, sys_check, remark):

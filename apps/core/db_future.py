@@ -3,6 +3,8 @@
 # @Author:Cadman
 # @File db_future.py
 
+import time
+
 import pymysql
 
 from DBUtils.PooledDB import PooledDB
@@ -55,12 +57,9 @@ class MysqlPool(object):
             database=DATABASE,
             charset='utf8'
         )
-        try:
-            self.conn = self.POOL.connection()
-        except Exception as e:
-            print(e)
-            logger.error(e)
-            raise e
+        self.conn = None
+        if not self.connect():
+            self._reConn()
 
     def __new__(cls, *args, **kw):
         '''
@@ -72,6 +71,27 @@ class MysqlPool(object):
         if not hasattr(cls, '_instance'):
             cls._instance = object.__new__(cls)
         return cls._instance
+
+    def connect(self):
+        try:
+            self.conn = self.POOL.connection()
+            return True
+        except Exception:
+            return False
+
+    def _reConn(self, num=28800, stime=2):  # 重试连接总次数为1天,这里根据实际情况自己设置,如果服务器宕机1天都没发现就......
+        _number = 0
+        _status = True
+        while _status and _number <= num:
+            try:
+                self.conn.ping()  # cping 校验连接是否异常
+                _status = False
+            except:
+                if self.connect() == True:  # 重新连接,成功退出
+                    _status = False
+                    break
+                _number += 1
+                time.sleep(stime)  # 连接不成功,休眠3秒钟,继续循环，知道成功或重试次数结束
 
     def close(self):
         '''

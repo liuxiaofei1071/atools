@@ -10,7 +10,7 @@ from apps.core.db_future import db
 from apps.core.base_response import UnicornException
 from apps.core.error.code_total import ErrorCode, ErrorINFO
 from apps.utils.used.tools import Tools
-from apps.utils.mysql.common_sql import CommonSQL, CommonFunc
+from apps.utils.mysql.common_sql import CommonSQL
 
 
 async def create(validate_model):
@@ -21,7 +21,7 @@ async def create(validate_model):
     create_by = validate_model.create_by
 
     id = Tools.uid()
-    status = CommonFunc.check_repeat(CommonSQL.IQ_VALIDATE_CHECK, question)
+    status = CommonSQL.check_repeat(db,CommonSQL.IQ_VALIDATE_CHECK, question)
     if status:
         db.insert(CommonSQL.IQ_VALIDATE_CREATE, id, question, answer, remark,kind,create_by)
     else:

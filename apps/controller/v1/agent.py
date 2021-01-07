@@ -8,8 +8,6 @@ from fastapi import Query
 
 from apps.core.base_response import success
 from apps.service import agent_service
-from apps.core.error.code_total import ErrorCode, ErrorINFO
-from apps.core.base_response import fail
 from apps.validator.model import ScriptModel, ScriptUpdateModel,AgentCode
 
 

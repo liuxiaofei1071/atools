@@ -10,13 +10,6 @@ class CommonSQL:
     sql语句集散中心
     """
 
-    @staticmethod
-    def check_repeat(db_obj,sql,*args):
-        """校验去重"""
-        result = db_obj.fetch_one(sql, args)
-        count = result.get("number")
-        return True if count == 0 else False
-
     #用户
     GET_USER_ID = "SELECT `id` FROM todo_user WHERE `id`=%s"
 
@@ -37,7 +30,9 @@ class CommonSQL:
     IQ_VALIDATE_ANSWER = """SELECT `answer` FROM coco_home.todo_interesting_poetry WHERE id=%s AND answer=%s"""
 
     # py相关
-    AGENT_SCRIPT_LIST = "SELECT * FROM cocoa.drive_py_script WHERE `is_del`=0"
+    AGENT_SCRIPT_LIST = """SELECT dps.*, tu.nick_name AS create_user FROM cocoa.drive_py_script dps 
+                           LEFT JOIN  cocoa.todo_user tu ON dps.create_by = tu.id WHERE dps.`is_del`=0"""
+
     AGENT_SCRIPT_CODE = """SELECT path FROM cocoa.cc_resource 
                             WHERE `id` =(SELECT resource_id FROM cocoa.drive_py_script WHERE id=%s AND `status`=1)"""
     AGENT_SCRIPT_CREATE = """INSERT INTO drive_py_script(`id`,`name`,`py_version`,`remark`,`resource_id`,

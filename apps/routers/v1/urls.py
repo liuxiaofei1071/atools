@@ -16,6 +16,7 @@ from apps.controller.v1 import (
     hardware_kind,
     interesting_iq,
     agent,
+    websocket_server
 )
 
 router = APIRouter()
@@ -60,10 +61,7 @@ router.delete("/host/server", summary="[余忆童稚时,能张目对日,明察�
 router.put("/host/server", summary="[天下难事,皆在人为] 更新", tags=["服务器"])(host_server.update_host_server)
 router.post("/bind/service", summary="[孤独的根号3] 绑定", tags=["服务器"])(host_server.bind_service)
 
-# 服务模块
-
 # 发布模块
-
 # 硬件类型模块
 router.get("/hardware/first/list", summary="[你若花开,蝴蝶自来] 全查(第一子类)", tags=["硬件库"])(hardware_kind.get_hardware_first_list)
 router.get("/hardware/second/list", summary="[自古中秋月最明,凉风届候夜弥清] 全查(第二子类)", tags=["硬件库"])(

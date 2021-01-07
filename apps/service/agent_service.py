@@ -32,8 +32,8 @@ async def create(py_model):
     _user = py_model.create_by
 
     id = Tools.uid()
-    status = CommonSQL.check_repeat(CommonSQL.AGENT_SCRIPT_CHECK,_name)
-    if status:
+    status = db.fetch_one(CommonSQL.AGENT_SCRIPT_CHECK,_name).get("number")
+    if status is 0:
         _user_id = db.fetch_one(CommonSQL.GET_USER_ID,_user)
         if _user_id:
             user_id = _user_id.get("id")

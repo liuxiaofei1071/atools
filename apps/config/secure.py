@@ -24,14 +24,18 @@ HTTP_PORT = int(os.getenv("HTTP_PORT"))
 HTTP_RELOAD = os.getenv("HTTP_RELOAD")
 DEBUG = True
 
-# 数据库配置
+# [MYSQL]
 DB_HOST = os.getenv('DB_HOST')
 DB_PORT = int(os.getenv("DB_PORT"))
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DATABASE = os.getenv('DATABASE')
 
-#secret_key 111
+# [REDIS]
+REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PORT = int(os.getenv("REDIS_PORT"))
+
+# [secret_key]
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = os.getenv('ALGORITHM')
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))

@@ -4,7 +4,7 @@
 # @Email : liuxiaofeikeke@163.com
 # @File : user_sql.py
 
-from apps.core.db_future import db
+from apps.core.db.database import db
 
 
 def create_sec_code(*args):
@@ -23,7 +23,7 @@ def get_user_code_list(id):
     """
     sql = """SELECT 
                 `id`, `username`,AES_DECRYPT(`password`,`salt`) AS `passwd`,`cn_name`,`remark` 
-            FROM sec_code WHERE `user_id`= %s"""
+            FROM coco_home.sec_code WHERE `user_id`= %s"""
     return db.fetch_all(sql, id)
 
 

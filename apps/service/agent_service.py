@@ -5,7 +5,7 @@
 
 import os
 
-from apps.core.db_future import db
+from apps.core.db.database import db
 from apps.core.base_response import UnicornException
 from apps.core.error.code_total import StatusCode
 from apps.utils.mysql.common_sql import CommonSQL
@@ -33,7 +33,7 @@ async def create(py_model):
 
     id = Tools.uid()
     status = db.fetch_one(CommonSQL.AGENT_SCRIPT_CHECK,_name).get("number")
-    if status is 0:
+    if status == 0:
         _user_id = db.fetch_one(CommonSQL.GET_USER_ID,_user)
         if _user_id:
             user_id = _user_id.get("id")

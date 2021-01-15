@@ -5,7 +5,7 @@
 # @File : music_sql.py
 
 # 歌曲模型
-from apps.core.db_future import db
+from apps.core.db.database import db
 
 
 def create_song_record(song_id, song_name, resource_id, size, singer_id=None):

@@ -4,7 +4,7 @@
 # @Email: liuxiaofeikeke@163.com
 # @File: hardware_sql.py
 
-from apps.core.db_future import db
+from apps.core.db.database import db
 
 
 def create_hardware_record(*args):

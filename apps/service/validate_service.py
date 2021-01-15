@@ -6,7 +6,7 @@
 
 import random
 
-from apps.core.db_future import db
+from apps.core.db.database import db
 from apps.core.base_response import UnicornException
 from apps.core.error.code_total import ErrorCode, ErrorINFO
 from apps.utils.used.tools import Tools

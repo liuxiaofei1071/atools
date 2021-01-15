@@ -12,17 +12,17 @@ from loguru import logger
 from apps.core.logs import InterceptHandler
 
 
-# system
+# [system]
 API_PREFIX = "/api"
 VERSION = "1.0.1"
 PROJECT_NAME = "FastAPI AToolsSystem"
 DEBUG = True
 
 
-#项目目录
+# [project directory]
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-#日志详情
+# [log information]
 LOG_LEVEL = "INFO"
 LOG_FORMAT = '{time:YYYY-MM-DD at HH:mm:ss} {level} {message}'
 LOG_FILENAME = "atool.log"

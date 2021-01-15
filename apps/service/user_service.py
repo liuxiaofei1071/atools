@@ -11,6 +11,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from fastapi import Header
 from apps.config import secure
+from apps.core.db.redis_db import r
 
 from apps.utils.rsa import OperateRSA
 from apps.utils.used.tools import Tools
@@ -112,6 +113,8 @@ async def generate_rsa():
     id = Tools.uid()
     public_key, private_key = OperateRSA().generate_rsa
     user_sql.create_rsa_record(id, private_key)
+    r.hset(id,"public_key",private_key)
+
     return {
         "access_id": id,
         "public_key": public_key

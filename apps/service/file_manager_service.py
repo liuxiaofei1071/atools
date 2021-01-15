@@ -5,7 +5,7 @@
 
 import os
 
-from apps.core.db_future import db
+from apps.core.db.database import db
 from apps.core.error.code_total import StatusCode
 from apps.core.base_response import UnicornException
 from apps.config.settings import TypePath, RESOURCE_PATH

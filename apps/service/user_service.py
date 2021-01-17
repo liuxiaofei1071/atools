@@ -54,7 +54,7 @@ async def login_service(login_model):
     access_id = login_model.access_id
 
     # rsa校验
-    private_key = user_sql.get_rsa_record(access_id)
+    private_key = r.hget(name=access_id,key="public_key")
     if private_key:
         orsa = OperateRSA()
         reduction_username = orsa.private_b64(_username, private_key)
@@ -62,7 +62,7 @@ async def login_service(login_model):
         # print(f"rsa解析账号：{reduction_username}")
         # print(f"rsa解析密码：{reduction_password}")
         if reduction_username and reduction_password:
-            user_sql.del_rsa_record(access_id)
+            r.delete(access_id)
             user_dict = user_sql.check_auth_record(reduction_username)
             if user_dict:
                 username = user_dict.get("identifier")
@@ -112,7 +112,7 @@ def create_token(
 async def generate_rsa():
     id = Tools.uid()
     public_key, private_key = OperateRSA().generate_rsa
-    user_sql.create_rsa_record(id, private_key)
+    # user_sql.create_rsa_record(id, private_key)
     r.hset(id,"public_key",private_key)
 
     return {

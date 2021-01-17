@@ -8,6 +8,28 @@ import re
 from typing import Optional
 from pydantic import BaseModel, validator, conint
 
+
+class FamilyBillUpdateModel(BaseModel):
+    title: str
+    money: float
+    fm_type: conint(le=1, ge=0)
+    payway: conint(le=6, ge=0)
+    expenses_kind_id: str
+    remark: Optional[str] = None
+    update_by:str
+
+class FamilyBillModel(BaseModel):
+    title:str
+    money:float
+    fm_type: conint(le=1, ge=0)
+    payway: conint(le=6, ge=0)
+    expenses_kind_id:str
+    remark:Optional[str] = None
+    create_by:str
+
+
+
+
 class AgentCode(BaseModel):
     code:str
 

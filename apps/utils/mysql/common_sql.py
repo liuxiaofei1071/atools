@@ -56,3 +56,10 @@ class CommonSQL:
     RESOURCE_CREATE = """INSERT INTO cc_resource
                 (`id`,`filename`,`size`,`suffix`,`path`,`create_by`,`create_time`,`update_by`,`update_time`)
             VALUES (%s,%s,%s,%s,%s,'admin',now(),'admin',now())"""
+
+    #理财相关
+    BILL_CHECK = "SELECT COUNT(*) as number  FROM ffms.fm_bill WHERE `title`=%s"
+    BILL_CREATE = """INSERT INTO ffms.fm_bill(`id`,`title`,`expenses_kind_id`,`payway`,`money`,`remark`,
+                                    `create_time`,`create_by`)VALUES (%s,%s,%s,%s,%s,%s,NOW(),%s)"""
+    BILL_LIST = """SELECT bill.*, tu.nick_name AS create_user FROM ffms.fm_bill bill 
+                           LEFT JOIN  cocoa.todo_user tu ON bill.create_by = tu.id WHERE bill.`is_del`=0"""

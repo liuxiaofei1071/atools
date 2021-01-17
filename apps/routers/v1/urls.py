@@ -16,7 +16,7 @@ from apps.controller.v1 import (
     hardware_kind,
     interesting_iq,
     agent,
-    websocket_server
+    financial
 )
 
 router = APIRouter()
@@ -84,7 +84,13 @@ router.put("/ip/validate", summary="[多情只有春庭月,犹为离人照落花
 router.get("/script/list", summary="[] 全查", tags=["驱动-agent"])(agent.get_script_list)
 router.post("/script", summary="[] 增", tags=["驱动-agent"])(agent.create_script)
 router.put("/script/{script_id}", summary="[] 改", tags=["驱动-agent"])(agent.update_script)
-router.delete("/script/", summary="[] 改", tags=["驱动-agent"])(agent.del_script)
+router.delete("/script/", summary="[] 删", tags=["驱动-agent"])(agent.del_script)
 
 router.get("/script/code", summary="[] 单查", tags=["驱动-code"])(agent.get_script_code)
 router.put("/script/code/{code_id}", summary="[] 改", tags=["驱动-code"])(agent.update_script_code)
+
+# financial module
+router.get("/bill/list", summary="[] 全查", tags=["理财"])(financial.get_bill_list)
+router.post("/bill", summary="[] 增", tags=["理财"])(financial.create_bill)
+router.put("/bill/{bill_id}", summary="[] 改", tags=["理财"])(financial.update_bill)
+router.delete("/bill/", summary="[] 删", tags=["理财"])(financial.del_bill)

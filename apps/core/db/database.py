@@ -1,13 +1,12 @@
 # _*_ coding:utf-8 _*_
 # @Time:2020/11/23 16:25
-# @Author:Cadman
+# @Author:Cassie·Lau
 # @File database.py
 
-import time
-
 import pymysql
-
 from DBUtils.PooledDB import PooledDB
+
+from apps.core.db import MySQLConfig
 from apps.config.settings import logger
 from apps.core.base_response import UnicornException
 from apps.core.error.code_total import StatusCode
@@ -20,46 +19,58 @@ from apps.config.secure import (
 )
 
 '''
-连接池
+DButils+pymysql
 '''
+
+
+class DatabaseConnectionPool(object):
+    __pool = None
+
+    def __enter__(self):
+        self.conn = self.__get_conn()
+        self.cursor = self.conn.cursor()
+        print("数据库连接池创建con和cursor")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.cursor.close()
+        self.conn.close()
+        print("连接池释放conn和cursor")
+
+
+    def __get_conn(self):
+        if self.__pool is None:
+            self.__pool = PooledDB(
+                creator=pymysql,
+                mincached=MySQLConfig.MIN_CACHED,
+                maxcached=MySQLConfig.MAX_CACHED,
+                maxshared=MySQLConfig.MAX_SHARED,
+                maxconnections=MySQLConfig.MAX_CONNECTIONS,
+                blocking=MySQLConfig.BLOCKING,
+                maxusage=MySQLConfig.MAX_USAGE,
+                setsession=MySQLConfig.SET_SESSION,
+                ping=0,
+                charset='utf8',
+                host=DB_HOST,
+                port=DB_PORT,
+                user=DB_USER,
+                password=DB_PASSWORD,
+                database=DATABASE,
+            )
+        return self.__pool.connection()
+
+    def get_conn(self,is_dict=False):
+        conn = self.__get_conn()
+        if is_dict:
+            cursor = conn.cursor(cursor=pymysql.cursors.DictCursor)
+        else:
+            cursor = conn.cursor()
+        return cursor,conn
 
 class MysqlPool(object):
 
     def __init__(self):
-        self.POOL = PooledDB(
-            creator=pymysql,  # 使用链接数据库的模块
-            maxconnections=6,  # 连接池允许的最大连接数，0和None表示不限制连接数
-            mincached=2,  # 初始化时，链接池中至少创建的空闲的链接，0表示不创建
-            maxcached=5,  # 链接池中最多闲置的链接，0和None不限制
-            maxshared=3,
-            # 链接池中最多共享的链接数量，
-            # 0和None表示全部共享。PS: 无用，因为pymysql和MySQLdb等模块的 threadsafety都为1，
-            # 所有值无论设置为多少，_maxcached永远为0，所以永远是所有链接都共享。
-
-            blocking=True,  # 连接池中如果没有可用连接后，是否阻塞等待。True，等待；False，不等待然后报错
-            maxusage=None,  # 一个链接最多被重复使用的次数，None表示无限制
-            setsession=[],
-            # 开始会话前执行的命令列表。
-            # 如：["set datestyle to ...", "set time zone ..."]
-
-            ping=0,
-            # ping MySQL服务端，检查是否服务可用。
-            # 如：0 = None = never,
-            # 1 = default = whenever it is requested,
-            # 2 = when a cursor is created,
-            # 4 = when a query is executed,
-            # 7 = always
-
-            host=DB_HOST,
-            port=DB_PORT,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DATABASE,
-            charset='utf8'
-        )
-        self.conn = None
-        if not self.connect():
-            self._reConn()
+        self.db = DatabaseConnectionPool()
 
     def __new__(cls, *args, **kw):
         '''
@@ -69,36 +80,53 @@ class MysqlPool(object):
         :return:
         '''
         if not hasattr(cls, '_instance'):
-            cls._instance = object.__new__(cls)
+            cls._instance = super(MysqlPool,cls).__new__(cls,*args,**kw)
         return cls._instance
 
-    def connect(self):
+    def execute(self,sql,param=None,autoclose=False,is_dict=False):
+        """
+        从连接池获取连接,并根据参数类型执行对应动作
+        :param sql:
+        :param param:
+        :param autoclose:
+        :return:
+        """
+        cursor,conn = self.db.get_conn(is_dict=is_dict)
+        count = 0
         try:
-            self.conn = self.POOL.connection()
-            return True
-        except Exception:
-            return False
+            if param:
+                count = cursor.execute(sql,param)
+            else:
+                count = cursor.execute(sql)
+            if autoclose:
+                self.close(cursor,conn)
 
-    def _reConn(self, num=28800, stime=2):  # 重试连接总次数为1天,这里根据实际情况自己设置,如果服务器宕机1天都没发现就......
-        _number = 0
-        _status = True
-        while _status and _number <= num:
-            try:
-                self.conn.ping()  # cping 校验连接是否异常
-                _status = False
-            except:
-                if self.connect() == True:  # 重新连接,成功退出
-                    _status = False
-                    break
-                _number += 1
-                time.sleep(stime)  # 连接不成功,休眠3秒钟,继续循环，知道成功或重试次数结束
+        except Exception as e:
+            print(e)
+        return cursor,conn,count
 
-    def close(self):
+
+    # def _reConn(self, num=28800, stime=2):  # 重试连接总次数为1天,这里根据实际情况自己设置,如果服务器宕机1天都没发现就......
+    #     _number = 0
+    #     _status = True
+    #     while _status and _number <= num:
+    #         try:
+    #             self.conn.ping()  # cping 校验连接是否异常
+    #             _status = False
+    #         except:
+    #             if self.connect() == True:  # 重新连接,成功退出
+    #                 _status = False
+    #                 break
+    #             _number += 1
+    #             time.sleep(stime)  # 连接不成功,休眠3秒钟,继续循环，知道成功或重试次数结束
+
+    def close(self,cursor,conn):
         '''
-        关闭连接
+        释放连接,归还给连接池
         :return:
         '''
-        self.conn.close()
+        cursor.close()
+        conn.close()
 
     def insert(self, sql, *args):
         '''
@@ -107,17 +135,15 @@ class MysqlPool(object):
         :param args:字段
         :return:
         '''
+        cursor, conn, count = self.execute(sql, args)
         try:
-            self.cursor = self.conn.cursor()
-            self.cursor.execute(sql, args)
-            self.conn.commit()
+            conn.commit()
+            self.close(cursor,conn)
         except Exception as e:
-            self.conn.rollback()
-            logger.exception(e)
-            raise UnicornException(StatusCode.C10001['code'],StatusCode.C10001['msg'])
-        finally:
-            self.cursor.close()
-
+            conn.rollback()
+            self.close(cursor, conn)
+            logger.error(e)
+            raise UnicornException(StatusCode.C10001['code'], StatusCode.C10001['msg'])
 
 
     def delete(self, sql, args):
@@ -127,35 +153,35 @@ class MysqlPool(object):
         :param args: 条件
         :return:
         """
-        self.cursor = self.conn.cursor()
+        cursor, conn, count = self.execute(sql, args)
         try:
-            self.cursor.execute(sql, args)
-            self.conn.commit()
+            conn.commit()
+            self.close(cursor, conn)
+            return count
         except Exception as e:
-            logger.exception(e)
-            self.conn.rollback()
-            raise UnicornException(StatusCode.C10003['code'],StatusCode.C10003['msg'])
-        finally:
-            self.cursor.close()
+            conn.rollback()
+            self.close(cursor, conn)
+            logger.error(e)
+            raise UnicornException(StatusCode.C10003['code'], StatusCode.C10003['msg'])
 
-    def delete_many(self,sql,args):
+
+    def delete_many(self, sql, args):
         """
         删除多条记录
         :param sql:
         :param args: 条件
         :return:
         """
-        self.cursor = self.conn.cursor()
+        cursor, conn = self.db.get_conn()
         try:
-            self.cursor.executemany(sql, args)
-            self.conn.commit()
+            cursor.executemany(sql, args)
+            conn.commit()
+            self.close(cursor, conn)
         except Exception as e:
             logger.exception(e)
-            self.conn.rollback()
-            raise UnicornException(StatusCode.C10003['code'],StatusCode.C10003['msg'])
-        finally:
-            self.cursor.close()
-
+            conn.rollback()
+            self.close(cursor,conn)
+            raise UnicornException(StatusCode.C10003['code'], StatusCode.C10003['msg'])
 
     def update(self, sql, *args):
         """
@@ -164,16 +190,16 @@ class MysqlPool(object):
         :param args: 条件,可以有多个条件
         :return:
         """
-        self.cursor = self.conn.cursor()
+        cursor, conn, count = self.execute(sql, args)
         try:
-            self.cursor.execute(sql, args)
-            self.conn.commit()
+            conn.commit()
+            self.close(cursor, conn)
+            return count
         except Exception as e:
-            self.conn.rollback()
-            logger.exception(e)
-            raise UnicornException(StatusCode.C10002['code'],StatusCode.C10002['msg'])
-        finally:
-            self.cursor.close()
+            conn.rollback()
+            self.close(cursor, conn)
+            logger.error(e)
+            raise UnicornException(StatusCode.C10002['code'], StatusCode.C10002['msg'])
 
     def fetch_one(self, sql, *args):
         '''
@@ -182,16 +208,16 @@ class MysqlPool(object):
         :param args:条件,可以多个条件
         :return:dict
         '''
-        self.cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
+        cursor, conn, count = self.execute(sql, param=args,is_dict=True)
+
         try:
-            self.cursor.execute(sql, args)
-            result = self.cursor.fetchone()
+            result = cursor.fetchone()
+            self.close(cursor, conn)
             return result if result else {}
         except Exception as e:
-            logger.exception(e)
-            raise UnicornException(StatusCode.C10004['code'],StatusCode.C10004['msg'])
-        finally:
-            self.cursor.close()
+            self.close(cursor,conn)
+            logger.error(e)
+            raise UnicornException(StatusCode.C10004['code'], StatusCode.C10004['msg'])
 
     def fetch_all(self, sql, args=None):
 
@@ -201,18 +227,14 @@ class MysqlPool(object):
         :param args:条件,可以为空
         :return:list
         '''
+        cursor, conn,count = self.execute(sql,param=args,is_dict=True)
         try:
-            self.cursor = self.conn.cursor(cursor=pymysql.cursors.DictCursor)
-            if args:
-                self.cursor.execute(sql, args)
-            else:
-                self.cursor.execute(sql)
-            return self.cursor.fetchall()
+            result = cursor.fetchall()
+            self.close(cursor,conn)
+            return result
         except Exception as e:
-            logger.exception(e)
-            raise UnicornException(StatusCode.C10005['code'],StatusCode.C10005['msg'])
-        finally:
-            self.cursor.close()
-
+            logger.error(e)
+            self.close(cursor,conn)
+            raise UnicornException(StatusCode.C10005['code'], StatusCode.C10005['msg'])
 
 db = MysqlPool()

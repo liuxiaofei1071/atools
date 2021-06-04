@@ -13,7 +13,7 @@ from apps.core.logs import InterceptHandler
 
 
 # [system]
-API_PREFIX = "/api"
+# API_PREFIX = "/api"
 VERSION = "1.0.1"
 PROJECT_NAME = "FastAPI AToolsSystem"
 DEBUG = True

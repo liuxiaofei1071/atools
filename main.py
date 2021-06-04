@@ -19,7 +19,6 @@ from apps.core.events import create_start_app_handler, create_stop_app_handler
 from apps.core.middle import init_middlewares
 from apps.router import router as api_router
 from apps.config.settings import (
-    API_PREFIX,
     VERSION,
     PROJECT_NAME,
     DEBUG,
@@ -27,7 +26,7 @@ from apps.config.settings import (
 
 
 def create_application() -> FastAPI:
-    application = FastAPI(title=PROJECT_NAME, debug=DEBUG, version=VERSION)
+    application = FastAPI(title=PROJECT_NAME, version=VERSION)
 
     # 添加事件
     application.add_event_handler("startup", create_start_app_handler(application))
@@ -43,5 +42,5 @@ def create_application() -> FastAPI:
     init_middlewares(application)
 
     # 添加路由
-    application.include_router(api_router, prefix=API_PREFIX)
+    application.include_router(api_router)
     return application

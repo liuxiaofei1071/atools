@@ -6,6 +6,15 @@
 from fastapi import APIRouter
 
 from apps.routers.v1 import urls as app_v1
+from apps.routers.v2 import urls as app_v2
+from apps.controller.v1 import websocket_server
 
 router = APIRouter()
-router.include_router(app_v1.router, prefix="/v1")
+router.websocket(path="/ws/{user}",)(websocket_server.websocket_endpoint)
+
+router.include_router(app_v1.router, prefix="/api/v1")
+router.include_router(app_v2.router, prefix="/api/v2")
+
+
+
+

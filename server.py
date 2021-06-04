@@ -18,8 +18,8 @@ app = create_application()
 if __name__ == '__main__':
     uvicorn.run(
         app='server:app',
-        debug=DEBUG,
+        debug=False,
         port=HTTP_PORT,
         host=HTTP_HOST,
-        reload = HTTP_RELOAD
+
     )

@@ -39,7 +39,7 @@ async def get_first_kind_list():
 
 async def get_kind_list():
     origin_list = hardware_sql.get_all_kind_record()
-
+    print(origin_list,22)
     def get_tree(top_id):
         data = []
         for item in origin_list:
@@ -50,7 +50,6 @@ async def get_kind_list():
                     "label": item["cn_name"]
                 }
                 if next_pid in [i["parent_id"] for i in origin_list]:
-
                     changed['children'] = get_tree(next_pid)
                     data.append(changed)
                 else:

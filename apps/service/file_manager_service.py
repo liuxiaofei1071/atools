@@ -10,7 +10,7 @@ from apps.core.error.code_total import StatusCode
 from apps.core.base_response import UnicornException
 from apps.config.settings import TypePath, RESOURCE_PATH
 from apps.utils.used.tools import Tools
-from apps.utils.parse import Parse
+from apps.utils.tools.filename_suffix_split import Parse
 from apps.utils.mysql.common_sql import CommonSQL
 
 

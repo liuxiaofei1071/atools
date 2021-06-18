@@ -4,14 +4,14 @@
 # @File agent.py
 
 from typing import Optional
-from fastapi import Query
+from fastapi import Query,Request
 
 from apps.core.base_response import success
 from apps.service import agent_service
 from apps.validator.model import ScriptModel, ScriptUpdateModel,AgentCode
 
 
-async def get_script_list():
+async def get_script_list(request:Request):
     data = await agent_service.read_list()
     return success(data=data)
 

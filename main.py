@@ -16,7 +16,7 @@ from apps.core.base_response import UnicornException
 from apps.core.error.http_error import http_error_handler, unicorn_exception_handler
 from apps.core.error.validation_error import http422_error_handler, request_validation_exception_handler
 from apps.core.events import create_start_app_handler, create_stop_app_handler
-from apps.core.middle import init_middlewares
+from apps.core.middle import init_middlewares,CustomMiddleware
 from apps.router import router as api_router
 from apps.config.settings import (
     VERSION,
@@ -40,6 +40,7 @@ def create_application() -> FastAPI:
 
     # 添加中间件
     init_middlewares(application)
+    application.add_middleware(CustomMiddleware)
 
     # 添加路由
     application.include_router(api_router)

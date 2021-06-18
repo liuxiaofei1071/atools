@@ -4,7 +4,7 @@
 # @File events.py
 
 from typing import Callable
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 
 
 def create_start_app_handler(app: FastAPI) -> Callable:

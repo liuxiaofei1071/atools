@@ -231,10 +231,12 @@ fabric.properties
 *.png
 *.txt
 # ######dir###########
-/apps/tests
+tests
 /apps/resource
 
 
 apps/resource/excel/
 apps/resource/icon/
 apps/resource/video/
+
+static

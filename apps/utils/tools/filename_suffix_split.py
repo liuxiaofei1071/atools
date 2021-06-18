@@ -1,7 +1,7 @@
 # _*_ coding:utf-8 _*_
 # @Time:2021/1/5 11:37
 # @Author:Cadman
-# @File parse.py
+# @File filename_suffix_split.py
 
 class Parse:
 
